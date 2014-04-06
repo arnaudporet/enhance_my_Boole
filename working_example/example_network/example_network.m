@@ -1,13 +1,9 @@
 #Copyright (c) 2013, Arnaud Poret
 #All rights reserved.
 
-#read the following comments, fill the following template, launch GNU Octave in your terminal, past this command and press Enter: run("~/kali/kali-sim/working_example/example_network/example_network.m")
+#read the following comments, fill the following template, open a terminal, launch octave, past this command and press Enter: run("~/kali-sim/working_example/example_network/example_network.m")
 
-#of course you can rename this file, save it elsewhere in your file system and accordingly change the path specified in the run command and in the add_path function
-
-#I recommend you to use the latest stable release of GNU Octave and of course to work with an UNIX OS
-
-#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 35 by "fltk"
+#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 31 by "fltk"
 
 #kmax: the number of iterations performed during the simulation
 
@@ -25,13 +21,13 @@
 
 #q: for each edges, the weakening of its value applied at each iteration, low for weak edges, high for strong edges, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
 
-#fedge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete the line 37
+#fedge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 33
 
-#fnode: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete the line 37
+#fnode: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 33
 
 clear all
 clc
-addpath("~/kali/kali-sim/lib/")
+addpath("~/kali-sim/lib/")
 graphics_toolkit("gnuplot")
 
 global edge_label node_label

@@ -1,12 +1,12 @@
 #Copyright (c) 2013, Arnaud Poret
 #All rights reserved.
 
-#run("~/kali/kali-sim/working_example/BIOMD0000000049/BIOMD0000000049.m")
+#run("~/kali-sim/working_example/BIOMD0000000049/BIOMD0000000049.m")
 
 clear all
 clc
-addpath("~/kali/kali-sim/lib/")
-#graphics_toolkit("gnuplot")
+addpath("~/kali-sim/lib/")
+graphics_toolkit("gnuplot")
 
 kmax=50;
 repeat=5;

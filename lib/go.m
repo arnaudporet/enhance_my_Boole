@@ -2,7 +2,7 @@
 #All rights reserved.
 function [edge,node]=go(fedge,fnode,node0,kmax,p,q,repeat,plot_label)
     for i_repeat=1:repeat
-        node(:,1,i_repeat)=(node0==-1).*unifrnd(0,1,size(node0,1),1)+(node0==0).*0+(node0==1).*unifrnd(0,1/3,size(node0,1),1)+(node0==2).*unifrnd(1/3,2/3,size(node0,1),1)+(node0==3).*unifrnd(2/3,1,size(node0,1),1)+(node0==4).*1;#node0
+        node(:,1,i_repeat)=(node0==-1).*unifrnd(0,1,size(node0,1),1)+(node0==0).*0+(node0==1).*unifrnd(0,1/3,size(node0,1),1)+(node0==2).*unifrnd(1/3,2/3,size(node0,1),1)+(node0==3).*unifrnd(2/3,1,size(node0,1),1)+(node0==4).*1;
         edge(:,1,i_repeat)=feval(fedge,node(:,:,i_repeat),1);
         pbis=(p==-1).*unifrnd(0,1,size(edge,1),1)+(p==1).*unifrnd(0,1/3,size(edge,1),1)+(p==2).*unifrnd(1/3,2/3,size(edge,1),1)+(p==3).*unifrnd(2/3,1,size(edge,1),1);
         qbis=(q==-1).*unifrnd(0,1,size(edge,1),1)+(q==0).*0+(q==1).*unifrnd(0,1/3,size(edge,1),1)+(q==2).*unifrnd(1/3,2/3,size(edge,1),1)+(q==3).*unifrnd(2/3,1,size(edge,1),1)+(q==4).*1;
