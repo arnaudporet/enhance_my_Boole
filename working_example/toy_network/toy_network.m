@@ -1,82 +1,96 @@
 #Copyright (c) 2013, Arnaud Poret
 #All rights reserved.
 
-#run("~/kali/kali-sim/working_example/inflammation/inflammation.m")
+#run("~/kali-sim/working_example/toy_network/toy_network.m")
 
 clear all
 clc
-addpath("~/kali/kali-sim/lib/")
+addpath("~/kali-sim/lib/")
 graphics_toolkit("gnuplot")
 
-global edge_label node_label
-
 kmax=50;
-repeat=5;
+repeat=1;
 
-edge_label={"infection__infection","pro__infection","infection__sensor","sensor__pro","anti__pro","pro__anti","sensor__anti"};
-node_label={"infection","sensor","pro","anti"};
+edge_label={"EGF__EGF","HRG__HRG","EGF__EGFR","HRG__EGFR","EGFR__Raf","AKT__Raf","Raf__ERK","EGFR__PI3K","ERK__PI3K","PI3K__AKT"};
+node_label={"EGF","HRG","EGFR","Raf","ERK","PI3K","AKT"};
 plot_label=node_label;
 
+#full: 4 (=1)
+#much: 3 (2/3<=,<=1)
+#some: 2 (1/3<=,<=2/3)
+#few: 1 (0<=,<=1/3)
+#off: 0 (=0)
+#undetermined: -1 (0<=,<=1)
 node0=[
-1;#infection
-0;#sensor
-0;#pro
-0#anti
+4;#EGF
+0;#HRG
+0;#EGFR
+0;#Raf
+0;#ERK
+0;#PI3K
+0#AKT
 ];
 
-#fast: 3
-#normal: 2
-#slow: 1
+#fast: 3 (2/3<=,<=1)
+#normal: 2 (1/3<=,<=2/3)
+#slow: 1 (0<=,<=1/3)
+#undetermined: -1 (0<=,<=1)
 p=[
-2;#infection__infection
-2;#pro__infection
-2;#infection__sensor
-2;#sensor__pro
-2;#anti__pro
-2;#pro__anti
-2#sensor__anti
+2;#EGF__EGF
+2;#HRG__HRG
+2;#EGF__EGFR
+2;#HRG__EGFR
+2;#EGFR__Raf
+2;#AKT__Raf
+2;#Raf__ERK
+2;#EGFR__PI3K
+2;#ERK__PI3K
+2#PI3K__AKT
 ];
 
-#none: 4
-#normal: 3
-#weaker: 2
-#weakest: 1
+#strong: 4 (=1)
+#normal: 3 (2/3<=,<=1)
+#weaker: 2 (1/3<=,<=2/3)
+#weakest: 1 (0<=,<=1/3)
+#down: 0 (=0)
+#undetermined: -1 (0<=,<=1)
 q=[
-4;#infection__infection
-3;#pro__infection
-3;#infection__sensor
-3;#sensor__pro
-3;#anti__pro
-3;#pro__anti
-3#sensor__anti
+4;#EGF__EGF
+4;#HRG__HRG
+4;#EGF__EGFR
+4;#HRG__EGFR
+4;#EGFR__Raf
+4;#AKT__Raf
+4;#Raf__ERK
+4;#EGFR__PI3K
+4;#ERK__PI3K
+4#PI3K__AKT
 ];
 
 function y=fedge(node,k)
-    global node_label
-    for i_node=1:numel(node_label)
-        eval(strcat(node_label{i_node},"=node(",num2str(i_node),",k);"))
-    endfor
     y=[
-    infection;#infection__infection
-    pro;#pro__infection
-    infection;#infection__sensor
-    sensor;#sensor__pro
-    anti;#anti__pro
-    pro;#pro__anti
-    sensor#sensor__anti
+    node(1,k);#EGF__EGF
+    node(2,k);#HRG__HRG
+    node(1,k);#EGF__EGFR
+    node(2,k);#HRG__EGFR
+    node(3,k);#EGFR__Raf
+    node(7,k);#AKT__Raf
+    node(4,k);#Raf__ERK
+    node(3,k);#EGFR__PI3K
+    node(5,k);#ERK__PI3K
+    node(6,k)#PI3K__AKT
     ];
 endfunction
 
 function y=fnode(edge,k)
-    global edge_label
-    for i_edge=1:numel(edge_label)
-        eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
-    endfor
     y=[
-    AND(infection__infection,NOT(pro__infection));#infection
-    infection__sensor;#sensor
-    AND(sensor__pro,NOT(anti__pro));#pro
-    AND(pro__anti,NOT(sensor__anti))#anti
+    edge(1,k);#EGF
+    edge(2,k);#HRG
+    OR(edge(3,k),edge(4,k));#EGFR
+    OR(edge(5,k),edge(6,k));#Raf
+    edge(7,k);#ERK
+    AND(edge(8,k),NOT(edge(9,k)));#PI3K
+    edge(10,k)#AKT
     ];
 endfunction
 
