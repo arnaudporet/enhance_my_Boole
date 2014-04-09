@@ -1,4 +1,4 @@
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #run("~/kali-sim/working_example/BIOMD0000000188/BIOMD0000000188.m")
@@ -98,7 +98,7 @@ endfunction
 ##############################    BSD 3-Clause    ##############################
 ################################################################################
 
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #Redistribution and use in source and binary forms, with or without modification,

@@ -1,4 +1,4 @@
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #run("~/kali-sim/working_example/BIOMD0000000049/BIOMD0000000049.m")
@@ -91,38 +91,38 @@ p=[
 #down: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 q=[
-4;#EGF__EGF
-4;#NGF__NGF
-4;#EGF__EGFR
-0;#EGFR__EGFR XXX
-4;#NGF__TrkA
-4;#EGFR__Shc
-4;#TrkA__Shc
-4;#EGFR__FRS2
-4;#TrkA__FRS2
-4;#EGFR__Dok
-4;#TrkA__Dok
-4;#Shc__Grb2
-4;#FRS2__Crk
-4;#Dok__RasGAP
-4;#Grb2__SOS
-4;#ERK__SOS
-4;#Crk__C3G
-4;#SOS__Ras
-4;#RasGAP__Ras
-4;#C3G__Rap1
-4;#Rap1GAP__Rap1
-4;#Rap1GAP__Rap1GAP
-4;#Ras__cRaf
-4;#Rap1__BRaf
-4;#Ras__BRaf
-4;#cRaf__MEK
-4;#BRaf__MEK
-4;#PP2A__MEK
-4;#PP2A__PP2A
-4;#MEK__ERK
-4;#MKP3__ERK
-4#MKP3__MKP3
+4;#EGF__EGF XXX self loop parameter XXX
+4;#NGF__NGF XXX self loop parameter XXX
+3;#EGF__EGFR
+4;#EGFR__EGFR XXX self loop degradation XXX
+3;#NGF__TrkA
+3;#EGFR__Shc
+3;#TrkA__Shc
+3;#EGFR__FRS2
+3;#TrkA__FRS2
+3;#EGFR__Dok
+3;#TrkA__Dok
+3;#Shc__Grb2
+3;#FRS2__Crk
+3;#Dok__RasGAP
+3;#Grb2__SOS
+3;#ERK__SOS
+3;#Crk__C3G
+3;#SOS__Ras
+3;#RasGAP__Ras
+3;#C3G__Rap1
+3;#Rap1GAP__Rap1
+4;#Rap1GAP__Rap1GAP XXX self loop parameter XXX
+3;#Ras__cRaf
+3;#Rap1__BRaf
+3;#Ras__BRaf
+3;#cRaf__MEK
+3;#BRaf__MEK
+3;#PP2A__MEK
+4;#PP2A__PP2A XXX self loop parameter XXX
+3;#MEK__ERK
+3;#MKP3__ERK
+4#MKP3__MKP3 XXX self loop parameter XXX
 ];
 
 function y=fedge(node,k)
@@ -195,7 +195,7 @@ endfunction
 ##############################    BSD 3-Clause    ##############################
 ################################################################################
 
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #Redistribution and use in source and binary forms, with or without modification,

@@ -1,4 +1,4 @@
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #run("~/kali-sim/working_example/toy_network/toy_network.m")
@@ -8,8 +8,8 @@ clc
 addpath("~/kali-sim/lib/")
 graphics_toolkit("gnuplot")
 
-kmax=50;
-repeat=1;
+kmax=25;
+repeat=3;
 
 edge_label={"EGF__EGF","HRG__HRG","EGF__EGFR","HRG__EGFR","EGFR__Raf","AKT__Raf","Raf__ERK","EGFR__PI3K","ERK__PI3K","PI3K__AKT"};
 node_label={"EGF","HRG","EGFR","Raf","ERK","PI3K","AKT"};
@@ -101,7 +101,7 @@ endfunction
 ##############################    BSD 3-Clause    ##############################
 ################################################################################
 
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #Redistribution and use in source and binary forms, with or without modification,

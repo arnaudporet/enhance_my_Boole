@@ -1,4 +1,4 @@
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #read the following comments, fill the following template, open a terminal, launch octave, past this command and press Enter: run("~/kali-sim/working_example/example_network/example_network.m")
@@ -118,7 +118,7 @@ endfunction
 ##############################    BSD 3-Clause    ##############################
 ################################################################################
 
-#Copyright (c) 2013, Arnaud Poret
+#Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
 #Redistribution and use in source and binary forms, with or without modification,
