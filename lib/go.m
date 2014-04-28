@@ -1,6 +1,6 @@
 #Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
-function [edge,node]=go(fedge,fnode,node0,kmax,p,q,repeat,plot_label)
+function [edge,node]=go(fedge,fnode,node0,kmax,p,q,dist,repeat,plot_label)
     for i_repeat=1:repeat
         node(:,1,i_repeat)=(node0==-1).*unifrnd(0,1,size(node0,1),1)+(node0==0).*0+(node0==1).*unifrnd(0,1/3,size(node0,1),1)+(node0==2).*unifrnd(1/3,2/3,size(node0,1),1)+(node0==3).*unifrnd(2/3,1,size(node0,1),1)+(node0==4).*1;
         edge(:,1,i_repeat)=feval(fedge,node(:,:,i_repeat),1);
@@ -8,7 +8,7 @@ function [edge,node]=go(fedge,fnode,node0,kmax,p,q,repeat,plot_label)
         qbis=(q==-1).*unifrnd(0,1,size(edge,1),1)+(q==0).*0+(q==1).*unifrnd(0,1/3,size(edge,1),1)+(q==2).*unifrnd(1/3,2/3,size(edge,1),1)+(q==3).*unifrnd(2/3,1,size(edge,1),1)+(q==4).*1;
         for k=1:kmax-1
             edge(:,k+1,i_repeat)=(1-pbis).*edge(:,k,i_repeat)+qbis.*pbis.*feval(fedge,node(:,:,i_repeat),k);
-            node(:,k+1,i_repeat)=feval(fnode,edge(:,:,i_repeat),k);
+            node(:,k+1,i_repeat)=not(dist(:,1)).*feval(fnode,edge(:,:,i_repeat),k)+dist(:,1).*(not(reshape(any(and(reshape(dist(:,3:size(dist,2))'.*kmax/10,2,(size(dist,2)-2)/2,size(dist,1))(1,:,:)<=k,k<=reshape(dist(:,3:size(dist,2))'.*kmax/10,2,(size(dist,2)-2)/2,size(dist,1))(2,:,:)),2),size(dist,1),1)).*feval(fnode,edge(:,:,i_repeat),k)+reshape(any(and(reshape(dist(:,3:size(dist,2))'.*kmax/10,2,(size(dist,2)-2)/2,size(dist,1))(1,:,:)<=k,k<=reshape(dist(:,3:size(dist,2))'.*kmax/10,2,(size(dist,2)-2)/2,size(dist,1))(2,:,:)),2),size(dist,1),1).*dist(:,2));
         endfor
     endfor
     for i_figure=1:ceil(numel(plot_label)/9)

@@ -3,7 +3,7 @@
 
 #read the following comments, fill the following template, open a terminal, launch octave, past this command and press Enter: run("~/kali-sim/working_example/example_network/example_network.m")
 
-#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 31 by "fltk"
+#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 33 by "fltk"
 
 #kmax: the number of iterations performed during the simulation
 
@@ -15,15 +15,17 @@
 
 #plot_label: the node names for the plot legends, for example if a node is named "DNA_damage" it can be renamed "DNA damage" for the plot legends
 
-#node0: the initial states of the nodes, those of the edges are computed by the algorithm, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
+#node0: the node initial states, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
 
 #p: for each edges, the portion of its value which is updated at each iteration, low for slow responsive edges, high for fast responsive edges, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
 
 #q: for each edges, the weakening of its value applied at each iteration, low for weak edges, high for strong edges, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
 
-#fedge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 33
+#fedge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 35
 
-#fnode: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 33
+#fnode: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 35
+
+#dist: a matrix to specify which entity to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals specified by their lower and upper bounds, both expressed in tenths of kmax. At each node corresponds a row in the dist matrix: the first coordinate specifies if a disturbance has to be applied, the second coordinate specifies the disturbance type (activation or inactivation) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals.
 
 clear all
 clc
@@ -43,10 +45,10 @@ plot_label=node_label;
 #much: 3 (2/3<=,<=1)
 #some: 2 (1/3<=,<=2/3)
 #few: 1 (0<=,<=1/3)
-#off: 0 (=0)
+#none: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 node0=[
-4;#infection
+0;#infection
 0;#sensor
 0;#anti
 0#pro
@@ -82,6 +84,14 @@ q=[
 3#anti__pro
 ];
 
+#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound,...
+dist=[
+1,1,1,3,5,8;#infection
+0,0,0,0,0,0;#sensor
+0,0,0,0,0,0;#anti
+0,0,0,0,0,0#pro
+];
+
 function y=fedge(node,k)
     global node_label
     for i_node=1:numel(node_label)
@@ -111,7 +121,7 @@ function y=fnode(edge,k)
     ];
 endfunction
 
-[edge,node]=go("fedge","fnode",node0,kmax,p,q,repeat,plot_label);
+[edge,node]=go("fedge","fnode",node0,kmax,p,q,dist,repeat,plot_label);
 
 ################################################################################
 ##############################       LICENSE      ##############################
@@ -145,4 +155,3 @@ endfunction
 #ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 #(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 #SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
