@@ -27,6 +27,8 @@
 
 #dist: a matrix to specify which entity to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals specified by their lower and upper bounds, both expressed in tenths of kmax. At each node corresponds a row in the dist matrix: the first coordinate specifies if a disturbance has to be applied, the second coordinate specifies the disturbance type (activation or inactivation) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals.
 
+#this example network is an implementation of a logical graph proposed by Melody K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling networks. Biochemistry, 49(15):3216–3224, 2010.
+
 clear all
 clc
 addpath("~/kali-sim/lib/")
@@ -37,8 +39,8 @@ global edge_label node_label
 kmax=50;
 repeat=5;
 
-edge_label={"infection__infection","pro__infection","infection__sensor","pro__anti","sensor__anti","sensor__pro","anti__pro"};
-node_label={"infection","sensor","anti","pro"};
+edge_label={"EGF__EGF","HRG__HRG","EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
+node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
 plot_label=node_label;
 
 #full: 4 (=1)
@@ -48,10 +50,13 @@ plot_label=node_label;
 #none: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 node0=[
-0;#infection
-0;#sensor
-0;#anti
-0#pro
+0;#EGF
+0;#HRG
+0;#EGFR
+0;#PI3K
+0;#AKT
+0;#Raf
+0#ERK
 ];
 
 #fast: 3 (2/3<=,<=1)
@@ -59,13 +64,16 @@ node0=[
 #slow: 1 (0<=,<=1/3)
 #undetermined: -1 (0<=,<=1)
 p=[
-2;#infection__infection
-2;#pro__infection
-2;#infection__sensor
-2;#pro__anti
-2;#sensor__anti
-2;#sensor__pro
-2#anti__pro
+2;#EGF__EGF
+2;#HRG__HRG
+2;#EGF__EGFR
+2;#HRG__EGFR
+2;#EGFR__PI3K
+2;#ERK__PI3K
+2;#PI3K__AKT
+2;#EGFR__Raf
+2;#AKT__Raf
+2#Raf__ERK
 ];
 
 #strong: 4 (=1)
@@ -75,21 +83,27 @@ p=[
 #down: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 q=[
-4;#infection__infection
-3;#pro__infection
-3;#infection__sensor
-3;#pro__anti
-3;#sensor__anti
-3;#sensor__pro
-3#anti__pro
+4;#EGF__EGF
+4;#HRG__HRG
+4;#EGF__EGFR
+4;#HRG__EGFR
+4;#EGFR__PI3K
+4;#ERK__PI3K
+4;#PI3K__AKT
+4;#EGFR__Raf
+4;#AKT__Raf
+4#Raf__ERK
 ];
 
 #yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound,...
 dist=[
-1,1,1,3,5,8;#infection
-0,0,0,0,0,0;#sensor
-0,0,0,0,0,0;#anti
-0,0,0,0,0,0#pro
+1,1,1,6;#EGF
+0,0,0,0;#HRG
+0,0,0,0;#EGFR
+0,0,0,0;#PI3K
+0,0,0,0;#AKT
+0,0,0,0;#Raf
+0,0,0,0#ERK
 ];
 
 function y=fedge(node,k)
@@ -98,13 +112,16 @@ function y=fedge(node,k)
         eval(strcat(node_label{i_node},"=node(",num2str(i_node),",k);"))
     endfor
     y=[
-    infection;#infection__infection
-    pro;#pro__infection
-    infection;#infection__sensor
-    pro;#pro__anti
-    sensor;#sensor__anti
-    sensor;#sensor__pro
-    anti#anti__pro
+    EGF;#EGF__EGF
+    HRG;#HRG__HRG
+    EGF;#EGF__EGFR
+    HRG;#HRG__EGFR
+    EGFR;#EGFR__PI3K
+    ERK;#ERK__PI3K
+    PI3K;#PI3K__AKT
+    EGFR;#EGFR__Raf
+    AKT;#AKT__Raf
+    Raf#Raf__ERK
     ];
 endfunction
 
@@ -114,10 +131,13 @@ function y=fnode(edge,k)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    AND(infection__infection,NOT(pro__infection));#infection
-    infection__sensor;#sensor
-    AND(pro__anti,NOT(sensor__anti));#anti
-    AND(sensor__pro,NOT(anti__pro))#pro
+    EGF__EGF;#EGF
+    HRG__HRG;#HRG
+    OR(EGF__EGFR,HRG__EGFR);#EGFR
+    AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
+    PI3K__AKT;#AKT
+    OR(EGFR__Raf,AKT__Raf);#Raf
+    Raf__ERK#ERK
     ];
 endfunction
 
