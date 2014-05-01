@@ -1,9 +1,9 @@
 #Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
-#read the following comments, fill the following template, open a terminal, launch octave, past this command and press Enter: run("~/kali-sim/working_example/example_network/example_network.m")
+#read the following comments, fill the following template, open a terminal, launch octave, past this command and press Enter: run("~/kali-sim/example_network.m")
 
-#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 35 by "fltk"
+#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 37 by "fltk"
 
 #kmax: the number of iterations performed during the simulation
 
@@ -21,11 +21,13 @@
 
 #q: for each edges, the weakening of its value applied at each iteration, low for weak edges, high for strong edges, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
 
-#fedge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 37
+#f_edge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 39
 
-#fnode: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 37
+#f_node: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 39
 
-#dist: a matrix to specify which entity to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals specified by their lower and upper bounds, both expressed in tenths of kmax. At each node corresponds a row in the dist matrix: the first coordinate specifies if a disturbance has to be applied, the second coordinate specifies the disturbance type (activation or inactivation) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals.
+#dist_edge: a matrix to specify which edge to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals specified by their lower and upper bounds, both expressed in tenths of kmax. At each edge corresponds a row in the dist_edge matrix: the first coordinate specifies if a disturbance has to be applied, the second coordinate specifies the disturbance type (activation or inactivation) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals.
+
+#dist_node: a matrix to specify which node to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals specified by their lower and upper bounds, both expressed in tenths of kmax. At each node corresponds a row in the dist_node matrix: the first coordinate specifies if a disturbance has to be applied, the second coordinate specifies the disturbance type (activation or inactivation) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals.
 
 #this example network is an implementation of a logical graph proposed by Melody K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling networks. Biochemistry, 49(15):3216–3224, 2010.
 
@@ -59,9 +61,11 @@ node0=[
 0#ERK
 ];
 
+#instantaneous: 4 (=1)
 #fast: 3 (2/3<=,<=1)
 #normal: 2 (1/3<=,<=2/3)
 #slow: 1 (0<=,<=1/3)
+#down: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 p=[
 2;#EGF__EGF
@@ -96,9 +100,23 @@ q=[
 ];
 
 #yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound,...
-dist=[
-1,1,1,6;#EGF
-0,0,0,0;#HRG
+dist_edge=[
+0,0,0,0;#EGF__EGF
+0,0,0,0;#HRG__HRG
+0,0,0,0;#EGF__EGFR
+0,0,0,0;#HRG__EGFR
+0,0,0,0;#EGFR__PI3K
+1,0,5,10;#ERK__PI3K
+0,0,0,0;#PI3K__AKT
+0,0,0,0;#EGFR__Raf
+0,0,0,0;#AKT__Raf
+0,0,0,0#Raf__ERK
+];
+
+#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound,...
+dist_node=[
+0,0,0,0;#EGF
+1,1,1,10;#HRG
 0,0,0,0;#EGFR
 0,0,0,0;#PI3K
 0,0,0,0;#AKT
@@ -106,42 +124,42 @@ dist=[
 0,0,0,0#ERK
 ];
 
-function y=fedge(node,k)
+function y=f_edge(node,k)
     global node_label
     for i_node=1:numel(node_label)
         eval(strcat(node_label{i_node},"=node(",num2str(i_node),",k);"))
     endfor
     y=[
-    EGF;#EGF__EGF
-    HRG;#HRG__HRG
-    EGF;#EGF__EGFR
-    HRG;#HRG__EGFR
-    EGFR;#EGFR__PI3K
-    ERK;#ERK__PI3K
-    PI3K;#PI3K__AKT
-    EGFR;#EGFR__Raf
-    AKT;#AKT__Raf
-    Raf#Raf__ERK
+    node(1,k);#EGF__EGF
+    node(2,k);#HRG__HRG
+    node(1,k);#EGF__EGFR
+    node(2,k);#HRG__EGFR
+    node(3,k);#EGFR__PI3K
+    node(7,k);#ERK__PI3K
+    node(4,k);#PI3K__AKT
+    node(3,k);#EGFR__Raf
+    node(5,k);#AKT__Raf
+    node(6,k)#Raf__ERK
     ];
 endfunction
 
-function y=fnode(edge,k)
+function y=f_node(edge,k)
     global edge_label
     for i_edge=1:numel(edge_label)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    EGF__EGF;#EGF
-    HRG__HRG;#HRG
-    OR(EGF__EGFR,HRG__EGFR);#EGFR
-    AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
-    PI3K__AKT;#AKT
-    OR(EGFR__Raf,AKT__Raf);#Raf
-    Raf__ERK#ERK
+    edge(1,k);#EGF
+    edge(2,k);#HRG
+    OR(edge(3,k),edge(4,k));#EGFR
+    AND(edge(5,k),NOT(edge(6,k)));#PI3K
+    edge(7,k);#AKT
+    OR(edge(8,k),edge(9,k));#Raf
+    edge(10,k)#ERK
     ];
 endfunction
 
-[edge,node]=go("fedge","fnode",node0,kmax,p,q,dist,repeat,plot_label);
+[edge,node]=go("f_edge","f_node",node0,kmax,p,q,dist_edge,dist_node,repeat,plot_label);
 
 ################################################################################
 ##############################       LICENSE      ##############################
