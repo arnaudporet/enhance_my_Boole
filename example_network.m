@@ -5,9 +5,9 @@
 
 #if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 37 by "fltk"
 
-#kmax: the number of iterations performed during the simulation
+#kmax: the number of iterations performed during a run
 
-#repeat: the number of times the simulation is repeated
+#repeat: the number of times the run is repeated
 
 #edge_label: the edge names
 
@@ -25,9 +25,9 @@
 
 #f_node: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 39
 
-#dist_edge: a matrix to specify which edge to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals specified by their lower and upper bounds, both expressed in tenths of kmax. At each edge corresponds a row in the dist_edge matrix: the first coordinate specifies if a disturbance has to be applied, the second coordinate specifies the disturbance type (activation or inactivation) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals.
+#D_edge: a matrix to specify which edge to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals of [[1;kmax]] specified by their lower and upper bounds, both expressed in tenths of kmax. At each edge corresponds a row in D_edge whose the first coordinate specifies if a disturbance has to be applied (yes=1, no=0), the second coordinate specifies the disturbance type (activation=1, inactivation=0) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals (lower bound, upper bound, lower bound, upper bound, ...).
 
-#dist_node: a matrix to specify which node to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals specified by their lower and upper bounds, both expressed in tenths of kmax. At each node corresponds a row in the dist_node matrix: the first coordinate specifies if a disturbance has to be applied, the second coordinate specifies the disturbance type (activation or inactivation) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals.
+#D_node: a matrix to specify which node to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals of [[1;kmax]] specified by their lower and upper bounds, both expressed in tenths of kmax. At each node corresponds a row in D_node whose the first coordinate specifies if a disturbance has to be applied (yes=1, no=0), the second coordinate specifies the disturbance type (activation=1, inactivation=0) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals (lower bound, upper bound, lower bound, upper bound, ...).
 
 #this example network is an implementation of a logical graph proposed by Melody K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling networks. Biochemistry, 49(15):3216–3224, 2010.
 
@@ -99,8 +99,8 @@ q=[
 4#Raf__ERK
 ];
 
-#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound,...
-dist_edge=[
+#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
+D_edge=[
 0,0,0,0;#EGF__EGF
 0,0,0,0;#HRG__HRG
 0,0,0,0;#EGF__EGFR
@@ -113,15 +113,15 @@ dist_edge=[
 0,0,0,0#Raf__ERK
 ];
 
-#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound,...
-dist_node=[
-0,0,0,0;#EGF
-1,1,1,10;#HRG
-0,0,0,0;#EGFR
-0,0,0,0;#PI3K
-0,0,0,0;#AKT
-0,0,0,0;#Raf
-0,0,0,0#ERK
+#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
+D_node=[
+1,1,1,3,6,9;#EGF
+0,0,0,0,0,0;#HRG
+0,0,0,0,0,0;#EGFR
+0,0,0,0,0,0;#PI3K
+0,0,0,0,0,0;#AKT
+0,0,0,0,0,0;#Raf
+0,0,0,0,0,0#ERK
 ];
 
 function y=f_edge(node,k)
@@ -130,16 +130,16 @@ function y=f_edge(node,k)
         eval(strcat(node_label{i_node},"=node(",num2str(i_node),",k);"))
     endfor
     y=[
-    node(1,k);#EGF__EGF
-    node(2,k);#HRG__HRG
-    node(1,k);#EGF__EGFR
-    node(2,k);#HRG__EGFR
-    node(3,k);#EGFR__PI3K
-    node(7,k);#ERK__PI3K
-    node(4,k);#PI3K__AKT
-    node(3,k);#EGFR__Raf
-    node(5,k);#AKT__Raf
-    node(6,k)#Raf__ERK
+    EGF;#EGF__EGF
+    HRG;#HRG__HRG
+    EGF;#EGF__EGFR
+    HRG;#HRG__EGFR
+    EGFR;#EGFR__PI3K
+    ERK;#ERK__PI3K
+    PI3K;#PI3K__AKT
+    EGFR;#EGFR__Raf
+    AKT;#AKT__Raf
+    Raf#Raf__ERK
     ];
 endfunction
 
@@ -149,17 +149,17 @@ function y=f_node(edge,k)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    edge(1,k);#EGF
-    edge(2,k);#HRG
-    OR(edge(3,k),edge(4,k));#EGFR
-    AND(edge(5,k),NOT(edge(6,k)));#PI3K
-    edge(7,k);#AKT
-    OR(edge(8,k),edge(9,k));#Raf
-    edge(10,k)#ERK
+    EGF__EGF;#EGF
+    HRG__HRG;#HRG
+    OR(EGF__EGFR,HRG__EGFR);#EGFR
+    AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
+    PI3K__AKT;#AKT
+    OR(EGFR__Raf,AKT__Raf);#Raf
+    Raf__ERK#ERK
     ];
 endfunction
 
-[edge,node]=go("f_edge","f_node",node0,kmax,p,q,dist_edge,dist_node,repeat,plot_label);
+[edge,node]=go("f_edge","f_node",node0,kmax,p,q,D_edge,D_node,repeat,plot_label);
 
 ################################################################################
 ##############################       LICENSE      ##############################
