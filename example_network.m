@@ -41,7 +41,7 @@ global edge_label node_label
 kmax=50;
 repeat=5;
 
-edge_label={"EGF__EGF","HRG__HRG","EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
+edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
 node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
 plot_label=node_label;
 
@@ -68,8 +68,6 @@ node0=[
 #down: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 p=[
-2;#EGF__EGF
-2;#HRG__HRG
 2;#EGF__EGFR
 2;#HRG__EGFR
 2;#EGFR__PI3K
@@ -87,8 +85,6 @@ p=[
 #down: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 q=[
-4;#EGF__EGF
-4;#HRG__HRG
 4;#EGF__EGFR
 4;#HRG__EGFR
 4;#EGFR__PI3K
@@ -100,29 +96,29 @@ q=[
 ];
 
 #yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
-D_edge=[
-0,0,0,0;#EGF__EGF
-0,0,0,0;#HRG__HRG
-0,0,0,0;#EGF__EGFR
-0,0,0,0;#HRG__EGFR
-0,0,0,0;#EGFR__PI3K
-1,0,5,10;#ERK__PI3K
-0,0,0,0;#PI3K__AKT
-0,0,0,0;#EGFR__Raf
-0,0,0,0;#AKT__Raf
-0,0,0,0#Raf__ERK
-];
+#D_edge=[
+#0,0,0,0;#EGF__EGF
+#0,0,0,0;#HRG__HRG
+#0,0,0,0;#EGF__EGFR
+#0,0,0,0;#HRG__EGFR
+#0,0,0,0;#EGFR__PI3K
+#1,0,5,10;#ERK__PI3K
+#0,0,0,0;#PI3K__AKT
+#0,0,0,0;#EGFR__Raf
+#0,0,0,0;#AKT__Raf
+#0,0,0,0#Raf__ERK
+#];
 
 #yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
-D_node=[
-1,1,1,3,6,9;#EGF
-0,0,0,0,0,0;#HRG
-0,0,0,0,0,0;#EGFR
-0,0,0,0,0,0;#PI3K
-0,0,0,0,0,0;#AKT
-0,0,0,0,0,0;#Raf
-0,0,0,0,0,0#ERK
-];
+#D_node=[
+#1,1,1,10;#EGF
+#0,0,0,0;#HRG
+#0,0,0,0;#EGFR
+#0,0,0,0;#PI3K
+#0,0,0,0;#AKT
+#0,0,0,0;#Raf
+#0,0,0,0#ERK
+#];
 
 function y=f_edge(node,k)
     global node_label
@@ -130,8 +126,6 @@ function y=f_edge(node,k)
         eval(strcat(node_label{i_node},"=node(",num2str(i_node),",k);"))
     endfor
     y=[
-    EGF;#EGF__EGF
-    HRG;#HRG__HRG
     EGF;#EGF__EGFR
     HRG;#HRG__EGFR
     EGFR;#EGFR__PI3K
@@ -149,8 +143,8 @@ function y=f_node(edge,k)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    EGF__EGF;#EGF
-    HRG__HRG;#HRG
+    0;#EGF
+    0;#HRG
     OR(EGF__EGFR,HRG__EGFR);#EGFR
     AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
     PI3K__AKT;#AKT
@@ -159,7 +153,7 @@ function y=f_node(edge,k)
     ];
 endfunction
 
-[edge,node]=go("f_edge","f_node",node0,kmax,p,q,D_edge,D_node,repeat,plot_label);
+[edge,node]=go("f_edge","f_node",node0,kmax,p,q,repeat,plot_label);#,D_edge,D_node
 
 ################################################################################
 ##############################       LICENSE      ##############################
