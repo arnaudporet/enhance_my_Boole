@@ -1,6 +1,6 @@
 #Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
-function [edge,node]=go(f_edge,f_node,node0,kmax,p,q,repeat,plot_label)#,D_edge,D_node
+function [edge,node]=go(f_edge,f_node,node0,kmax,p,q,repeat,plot_label)
     for i_repeat=1:repeat
         node(:,1,i_repeat)=(node0==-1).*unifrnd(0,1,size(node0,1),1)+(node0==0).*0+(node0==1).*unifrnd(0,1/3,size(node0,1),1)+(node0==2).*unifrnd(1/3,2/3,size(node0,1),1)+(node0==3).*unifrnd(2/3,1,size(node0,1),1)+(node0==4).*1;
         edge(:,1,i_repeat)=feval(f_edge,node(:,:,i_repeat),1);
@@ -9,8 +9,6 @@ function [edge,node]=go(f_edge,f_node,node0,kmax,p,q,repeat,plot_label)#,D_edge,
         for k=1:kmax-1
             edge(:,k+1,i_repeat)=(1-pbis).*edge(:,k,i_repeat)+qbis.*pbis.*feval(f_edge,node(:,:,i_repeat),k);
             node(:,k+1,i_repeat)=feval(f_node,edge(:,:,i_repeat),k);
-#            edge(:,k+1,i_repeat)=not(D_edge(:,1)).*((1-pbis).*edge(:,k,i_repeat)+qbis.*pbis.*feval(f_edge,node(:,:,i_repeat),k))+D_edge(:,1).*(not(reshape(any(and(reshape(D_edge(:,3:size(D_edge,2))'.*kmax/10,2,(size(D_edge,2)-2)/2,size(D_edge,1))(1,:,:)<=k,k<=reshape(D_edge(:,3:size(D_edge,2))'.*kmax/10,2,(size(D_edge,2)-2)/2,size(D_edge,1))(2,:,:)),2),size(D_edge,1),1)).*((1-pbis).*edge(:,k,i_repeat)+qbis.*pbis.*feval(f_edge,node(:,:,i_repeat),k))+reshape(any(and(reshape(D_edge(:,3:size(D_edge,2))'.*kmax/10,2,(size(D_edge,2)-2)/2,size(D_edge,1))(1,:,:)<=k,k<=reshape(D_edge(:,3:size(D_edge,2))'.*kmax/10,2,(size(D_edge,2)-2)/2,size(D_edge,1))(2,:,:)),2),size(D_edge,1),1).*D_edge(:,2));
-#            node(:,k+1,i_repeat)=not(D_node(:,1)).*feval(f_node,edge(:,:,i_repeat),k)+D_node(:,1).*(not(reshape(any(and(reshape(D_node(:,3:size(D_node,2))'.*kmax/10,2,(size(D_node,2)-2)/2,size(D_node,1))(1,:,:)<=k,k<=reshape(D_node(:,3:size(D_node,2))'.*kmax/10,2,(size(D_node,2)-2)/2,size(D_node,1))(2,:,:)),2),size(D_node,1),1)).*feval(f_node,edge(:,:,i_repeat),k)+reshape(any(and(reshape(D_node(:,3:size(D_node,2))'.*kmax/10,2,(size(D_node,2)-2)/2,size(D_node,1))(1,:,:)<=k,k<=reshape(D_node(:,3:size(D_node,2))'.*kmax/10,2,(size(D_node,2)-2)/2,size(D_node,1))(2,:,:)),2),size(D_node,1),1).*D_node(:,2));
         endfor
     endfor
     for i_figure=1:ceil(numel(plot_label)/9)
@@ -25,7 +23,7 @@ function [edge,node]=go(f_edge,f_node,node0,kmax,p,q,repeat,plot_label)#,D_edge,
         subplot(3,3,i_node-9*(ceil(i_node/9)-1))
         plot((1:kmax)',NODE')
         axis([1,kmax,-0.1,1.1],"ticy","labely")
-        title(plot_label{i_node})#legend(plot_label{i_node})
+        title(plot_label{i_node})
         #box("off")
         #grid("on")
     endfor

@@ -68,31 +68,6 @@ q=[
 4#Raf__ERK
 ];
 
-##yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
-#D_edge=[
-#0,0,0,0;#EGF__EGF
-#0,0,0,0;#HRG__HRG
-#0,0,0,0;#EGF__EGFR
-#0,0,0,0;#HRG__EGFR
-#0,0,0,0;#EGFR__PI3K
-#0,0,0,0;#ERK__PI3K
-#0,0,0,0;#PI3K__AKT
-#0,0,0,0;#EGFR__Raf
-#0,0,0,0;#AKT__Raf
-#0,0,0,0#Raf__ERK
-#];
-
-##yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
-#D_node=[
-#1,1,1,10;#EGF
-#0,0,0,0;#HRG
-#0,0,0,0;#EGFR
-#0,0,0,0;#PI3K
-#0,0,0,0;#AKT
-#0,0,0,0;#Raf
-#0,0,0,0#ERK
-#];
-
 function y=f_edge(node,k)
     y=[
     node(1,k);#EGF__EGFR
@@ -119,7 +94,7 @@ function y=f_node(edge,k)
     ];
 endfunction
 
-[edge,node]=go("f_edge","f_node",node0,kmax,p,q,repeat,plot_label);#,D_edge,D_node
+[edge,node]=go("f_edge","f_node",node0,kmax,p,q,repeat,plot_label);
 
 ################################################################################
 ##############################       LICENSE      ##############################

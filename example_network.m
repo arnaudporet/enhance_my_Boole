@@ -3,7 +3,7 @@
 
 #read the following comments, fill the following template, open a terminal, launch octave, past this command and press Enter: run("~/kali-sim/example_network.m")
 
-#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 37 by "fltk"
+#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 33 by "fltk"
 
 #kmax: the number of iterations performed during a run
 
@@ -21,15 +21,11 @@
 
 #q: for each edges, the weakening of its value applied at each iteration, low for weak edges, high for strong edges, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
 
-#f_edge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 39
+#f_edge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 35
 
-#f_node: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 39
+#f_node: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 35
 
-#D_edge: a matrix to specify which edge to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals of [[1;kmax]] specified by their lower and upper bounds, both expressed in tenths of kmax. At each edge corresponds a row in D_edge whose the first coordinate specifies if a disturbance has to be applied (yes=1, no=0), the second coordinate specifies the disturbance type (activation=1, inactivation=0) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals (lower bound, upper bound, lower bound, upper bound, ...).
-
-#D_node: a matrix to specify which node to disturb, which kind of disturbance to apply and when. The disturbances are applied during intervals of [[1;kmax]] specified by their lower and upper bounds, both expressed in tenths of kmax. At each node corresponds a row in D_node whose the first coordinate specifies if a disturbance has to be applied (yes=1, no=0), the second coordinate specifies the disturbance type (activation=1, inactivation=0) and the remaining of the coordinates are couples specifying the lower and upper bounds of the intervals (lower bound, upper bound, lower bound, upper bound, ...).
-
-#this example network is an implementation of a logical graph proposed by Melody K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling networks. Biochemistry, 49(15):3216–3224, 2010.
+#the example network is an implementation of a logical graph used by Melody K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling networks. Biochemistry, 49(15):3216–3224, 2010.
 
 clear all
 clc
@@ -52,8 +48,8 @@ plot_label=node_label;
 #none: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 node0=[
-0;#EGF
-0;#HRG
+0;#EGF (INPUT)
+0;#HRG (INPUT)
 0;#EGFR
 0;#PI3K
 0;#AKT
@@ -95,31 +91,6 @@ q=[
 4#Raf__ERK
 ];
 
-#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
-#D_edge=[
-#0,0,0,0;#EGF__EGF
-#0,0,0,0;#HRG__HRG
-#0,0,0,0;#EGF__EGFR
-#0,0,0,0;#HRG__EGFR
-#0,0,0,0;#EGFR__PI3K
-#1,0,5,10;#ERK__PI3K
-#0,0,0,0;#PI3K__AKT
-#0,0,0,0;#EGFR__Raf
-#0,0,0,0;#AKT__Raf
-#0,0,0,0#Raf__ERK
-#];
-
-#yes/no (1/0), activation/inactivation (1/0), lower bound, upper bound, lower bound, upper bound, ...
-#D_node=[
-#1,1,1,10;#EGF
-#0,0,0,0;#HRG
-#0,0,0,0;#EGFR
-#0,0,0,0;#PI3K
-#0,0,0,0;#AKT
-#0,0,0,0;#Raf
-#0,0,0,0#ERK
-#];
-
 function y=f_edge(node,k)
     global node_label
     for i_node=1:numel(node_label)
@@ -143,8 +114,8 @@ function y=f_node(edge,k)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    0;#EGF
-    0;#HRG
+    1;#EGF (INPUT)
+    0;#HRG (INPUT)
     OR(EGF__EGFR,HRG__EGFR);#EGFR
     AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
     PI3K__AKT;#AKT
@@ -153,7 +124,7 @@ function y=f_node(edge,k)
     ];
 endfunction
 
-[edge,node]=go("f_edge","f_node",node0,kmax,p,q,repeat,plot_label);#,D_edge,D_node
+[edge,node]=go("f_edge","f_node",node0,kmax,p,q,repeat,plot_label);
 
 ################################################################################
 ##############################       LICENSE      ##############################

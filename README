@@ -2,4 +2,12 @@
 #####################    Simulation of network dynamics    #####################
 ################################################################################
 
-work in progress...
+/!\    work in progress    /!\
+
+1. clone the project in your home directory: ~/
+2. open the template file: ~/kali-sim/example_network.m
+
+The example network is an implementation of a logical graph used by Melody K
+Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and Douglas
+A Lauffenburger. Logic-based models for the analysis of cell signaling networks.
+Biochemistry, 49(15):3216–3224, 2010.
