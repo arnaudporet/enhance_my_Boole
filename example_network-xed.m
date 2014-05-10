@@ -2,7 +2,8 @@
 #All rights reserved.
 
 #run("~/kali-sim/example_network-xed.m")
-#%print(1,"~/kali/from_boolean_networks_to_fuzzy_networks/tralala","-mono","-dpdf")
+#print(1,"~/kali/from_boolean_networks_to_fuzzy_networks/tralala","-mono","-dpdf")
+#print(1,"~/Downloads/from_boolean_networks_to_fuzzy_networks/tralala","-mono","-dpdf")
 
 clear all
 clc
@@ -13,7 +14,7 @@ global kdist
 
 kmax=50;
 repeat=10;
-kdist=[1,10]*kmax/10;
+kdist=[3,10]*kmax/10;
 
 edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
 node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
@@ -62,7 +63,7 @@ q=[
 4;#EGF__EGFR
 4;#HRG__EGFR
 4;#EGFR__PI3K
-2;#ERK__PI3K
+4;#ERK__PI3K
 4;#PI3K__AKT
 4;#EGFR__Raf
 4;#AKT__Raf
