@@ -35,16 +35,17 @@ graphics_toolkit("gnuplot")
 global edge_label node_label
 
 kmax=50;
-repeat=5;
+repeat=10;
 
 edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
 node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
 plot_label=node_label;
 
-#full: 4 (=1)
-#much: 3 (2/3<=,<=1)
-#some: 2 (1/3<=,<=2/3)
-#few: 1 (0<=,<=1/3)
+#full: 5 (=1)
+#much more: 4 (0.75<=,<=1)
+#much: 3 (0.5<=,<=0.75)
+#few: 2 (0.25<=,<=0.5)
+#fewer: 1 (0<=,<=0.25)
 #none: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 node0=[
@@ -57,38 +58,40 @@ node0=[
 0#ERK
 ];
 
-#instantaneous: 4 (=1)
-#fast: 3 (2/3<=,<=1)
-#normal: 2 (1/3<=,<=2/3)
-#slow: 1 (0<=,<=1/3)
+#instantaneous: 5 (=1)
+#faster: 4 (0.75<=,<=1)
+#fast: 3 (0.5<=,<=0.75)
+#slow: 2 (0.25<=,<=0.5)
+#slower: 1 (0<=,<=0.25)
 #down: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 p=[
-2;#EGF__EGFR
-2;#HRG__EGFR
-2;#EGFR__PI3K
-2;#ERK__PI3K
-2;#PI3K__AKT
-2;#EGFR__Raf
-2;#AKT__Raf
-2#Raf__ERK
+3;#EGF__EGFR
+3;#HRG__EGFR
+3;#EGFR__PI3K
+3;#ERK__PI3K
+3;#PI3K__AKT
+3;#EGFR__Raf
+3;#AKT__Raf
+3#Raf__ERK
 ];
 
-#strong: 4 (=1)
-#normal: 3 (2/3<=,<=1)
-#weaker: 2 (1/3<=,<=2/3)
-#weakest: 1 (0<=,<=1/3)
+#strong: 5 (=1)
+#weaker: 4 (0.75<=,<=1)
+#weak: 3 (0.5<=,<=0.75)
+#faint: 2 (0.25<=,<=0.5)
+#fainter: 1 (0<=,<=0.25)
 #down: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 q=[
-4;#EGF__EGFR
-4;#HRG__EGFR
-4;#EGFR__PI3K
-4;#ERK__PI3K
-4;#PI3K__AKT
-4;#EGFR__Raf
-4;#AKT__Raf
-4#Raf__ERK
+5;#EGF__EGFR
+5;#HRG__EGFR
+5;#EGFR__PI3K
+5;#ERK__PI3K
+5;#PI3K__AKT
+5;#EGFR__Raf
+5;#AKT__Raf
+5#Raf__ERK
 ];
 
 function y=f_edge(node,k)
