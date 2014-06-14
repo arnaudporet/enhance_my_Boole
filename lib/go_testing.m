@@ -8,14 +8,14 @@ function [edge,node]=go_testing(f_edge,f_node,node0,kmax,p,q,repeat,plot_label)
         pbis=(p==-1).*unifrnd(0,1,size(edge,1),1)+(p==0)*0+(p==1).*unifrnd(0,0.25,size(edge,1),1)+(p==2).*unifrnd(0.25,0.5,size(edge,1),1)+(p==3).*unifrnd(0.5,0.75,size(edge,1),1)+(p==4).*unifrnd(0.75,1,size(edge,1),1)+(p==5)*1;
         qbis=(q==-1).*unifrnd(0,1,size(edge,1),1)+(q==0)*0+(q==1).*unifrnd(0,0.25,size(edge,1),1)+(q==2).*unifrnd(0.25,0.5,size(edge,1),1)+(q==3).*unifrnd(0.5,0.75,size(edge,1),1)+(q==4).*unifrnd(0.75,1,size(edge,1),1)+(q==5)*1;
         EGF_no_dist=node(1,1,i_repeat);
-        EGF_dist=1;#unifrnd(0.25,0.5,1,1);
         HRG_no_dist=node(1,1,i_repeat);
-        HRG_dist=unifrnd(0.25,0.5,1,1);
+        EGF_dist=1;#unifrnd(0.25,0.5,1,1);
+        HRG_dist=0;#unifrnd(0.25,0.5,1,1);
         for k=1:kmax-1
             edge(:,k+1,i_repeat)=(1-pbis).*edge(:,k,i_repeat)+qbis.*pbis.*feval(f_edge,node(:,:,i_repeat),k);
             node(:,k+1,i_repeat)=feval(f_node,edge(:,:,i_repeat),k);
             node(1,k+1,i_repeat)=not(and(kdist(1)<=k,k<=kdist(2)))*EGF_no_dist+and(kdist(1)<=k,k<=kdist(2))*EGF_dist;
-            #node(2,k+1,i_repeat)=not(and(kdist(1)<=k,k<=kdist(2)))*HRG_no_dist+and(kdist(1)<=k,k<=kdist(2))*HRG_dist;
+            node(2,k+1,i_repeat)=not(and(kdist(1)<=k,k<=kdist(2)))*HRG_no_dist+and(kdist(1)<=k,k<=kdist(2))*HRG_dist;
         endfor
     endfor
     for i_figure=1:ceil(numel(plot_label)/9)

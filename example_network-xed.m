@@ -2,8 +2,7 @@
 #All rights reserved.
 
 #run("~/kali-sim/example_network-xed.m")
-#print(1,"~/kali/from_boolean_networks_to_fuzzy_networks/tralala","-mono","-dpdf")
-#print(1,"~/Downloads/from_boolean_networks_to_fuzzy_networks/tralala","-mono","-dpdf")
+#print("-f1","~/kali/from_boolean_networks_to_fuzzy_networks/tralala","-mono","-dpng")
 
 clear all
 clc
