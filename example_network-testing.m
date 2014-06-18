@@ -1,7 +1,7 @@
 #Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
-#run("~/kali-sim/example_network-xed.m")
+#run("~/kali-sim/example_network-testing.m")
 #print("-f1","~/kali/from_boolean_networks_to_fuzzy_networks/tralala","-mono","-dpng")
 
 clear all
@@ -27,8 +27,8 @@ plot_label=node_label;
 #none: 0 (=0)
 #undetermined: -1 (0<=,<=1)
 node0=[
-0;#EGF (INPUT)
-0;#HRG (INPUT)
+0;#EGF
+0;#HRG
 0;#EGFR
 0;#PI3K
 0;#AKT
@@ -87,8 +87,8 @@ endfunction
 
 function y=f_node(edge,k)
     y=[
-    0;#EGF (INPUT)
-    0;#HRG (INPUT)
+    0;#EGF
+    0;#HRG
     OR(edge(1,k),edge(2,k));#EGFR
     AND(edge(3,k),NOT(edge(4,k)));#PI3K
     edge(5,k);#AKT

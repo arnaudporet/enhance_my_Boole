@@ -1,56 +1,56 @@
 #Copyright (c) 2013-2014, Arnaud Poret
 #All rights reserved.
 
-#read the following comments, fill the following template, open a terminal, launch octave, past this command and press Enter: run("~/kali-sim/example_network.m")
+#how to:
+#    1) read the comments
+#    2) fill the template
+#    3) open a terminal
+#    4) launch octave
+#    5) past this command: run("~/kali-sim/example_network.m")
+#    6) press Enter
 
-#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the argument of the graphics_toolkit function at line 33 by "fltk"
-
-#kmax: the number of iterations performed during a run
-
-#repeat: the number of times the run is repeated
-
-#edge_label: the edge names
-
-#node_label: the node names
-
-#plot_label: the node names for the plot legends, for example if a node is named "DNA_damage" it should be renamed "DNA damage" for the plot legends
-
-#node0: the node initial states, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
-
-#p: for each edges, the portion of its value which is updated at each iteration, low for slow responsive edges, high for fast responsive edges, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
-
-#q: for each edges, the weakening of its value applied at each iteration, low for weak edges, high for strong edges, selected randomly by the algorithm along a uniform distribution in an appropriate interval of [0;1]
-
-#f_edge: the function which update edge values at each iterations, for shorter computation time, comment or delete the first four lines and replace <node name> by node(<i>,k), also comment or delete line 35
-
-#f_node: the function which update node values at each iterations, for shorter computation time, comment or delete the first four lines and replace <edge name> by edge(<i>,k), also comment or delete line 35
-
-#the example network is an implementation of a logical graph used by Melody K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling networks. Biochemistry, 49(15):3216–3224, 2010.
+#the example network is an implementation of a logical model used by Melody
+#K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and
+#Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling
+#networks. Biochemistry, 49(15):3216–3224, 2010.
 
 clear all
 clc
 addpath("~/kali-sim/lib/")
+
+#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the
+#argument by "fltk"
 graphics_toolkit("gnuplot")
 
 global edge_label node_label
 
+#the number of iterations performed during a run
 kmax=50;
-repeat=10;
 
+#the number of times the run is repeated
+repeat=5;
+
+#the edge names
 edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
+
+#the node names
 node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
+
+#the node names for the plot legends, for example if a node is named
+#"DNA_damage" it should be renamed "DNA damage" for the plot legends
 plot_label=node_label;
 
-#full: 5 (=1)
-#much more: 4 (0.75<=,<=1)
-#much: 3 (0.5<=,<=0.75)
-#few: 2 (0.25<=,<=0.5)
-#fewer: 1 (0<=,<=0.25)
-#none: 0 (=0)
-#undetermined: -1 (0<=,<=1)
+#the node initial states:
+#    5: full (=1)
+#    4: much more (0.75<=,<=1)
+#    3: much (0.5<=,<=0.75)
+#    2: few (0.25<=,<=0.5)
+#    1: fewer (0<=,<=0.25)
+#    0: none (=0)
+#   -1: undetermined (0<=,<=1)
 node0=[
-0;#EGF (INPUT)
-0;#HRG (INPUT)
+5;#EGF
+0;#HRG
 0;#EGFR
 0;#PI3K
 0;#AKT
@@ -58,13 +58,14 @@ node0=[
 0#ERK
 ];
 
-#instantaneous: 5 (=1)
-#faster: 4 (0.75<=,<=1)
-#fast: 3 (0.5<=,<=0.75)
-#slow: 2 (0.25<=,<=0.5)
-#slower: 1 (0<=,<=0.25)
-#down: 0 (=0)
-#undetermined: -1 (0<=,<=1)
+#for each edges, the portion of its value which is updated at each iteration:
+#    5: instantaneous (=1)
+#    4: faster (0.75<=,<=1)
+#    3: fast (0.5<=,<=0.75)
+#    2: slow (0.25<=,<=0.5)
+#    1: slower (0<=,<=0.25)
+#    0: down (=0)
+#   -1: undetermined (0<=,<=1)
 p=[
 3;#EGF__EGFR
 3;#HRG__EGFR
@@ -76,13 +77,14 @@ p=[
 3#Raf__ERK
 ];
 
-#strong: 5 (=1)
-#weaker: 4 (0.75<=,<=1)
-#weak: 3 (0.5<=,<=0.75)
-#faint: 2 (0.25<=,<=0.5)
-#fainter: 1 (0<=,<=0.25)
-#down: 0 (=0)
-#undetermined: -1 (0<=,<=1)
+#for each edges, the weakening of its value applied at each iteration:
+#    5: strong (=1)
+#    4: weaker (0.75<=,<=1)
+#    3: weak (0.5<=,<=0.75)
+#    2: faint (0.25<=,<=0.5)
+#    1: fainter (0<=,<=0.25)
+#    0: down (=0)
+#   -1: undetermined (0<=,<=1)
 q=[
 5;#EGF__EGFR
 5;#HRG__EGFR
@@ -94,6 +96,9 @@ q=[
 5#Raf__ERK
 ];
 
+#the function which update edge values at each iterations, for shorter
+#computation time, comment or delete the first four lines and replace
+#<node name> by node(<i>,k)
 function y=f_edge(node,k)
     global node_label
     for i_node=1:numel(node_label)
@@ -111,14 +116,17 @@ function y=f_edge(node,k)
     ];
 endfunction
 
+#the function which update node values at each iterations, for shorter
+#computation time, comment or delete the first four lines and replace
+#<edge name> by edge(<i>,k)
 function y=f_node(edge,k)
     global edge_label
     for i_edge=1:numel(edge_label)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    1;#EGF (INPUT)
-    0;#HRG (INPUT)
+    1;#EGF
+    0;#HRG
     OR(EGF__EGFR,HRG__EGFR);#EGFR
     AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
     PI3K__AKT;#AKT
