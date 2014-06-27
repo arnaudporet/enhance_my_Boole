@@ -1,6 +1,3 @@
-#Copyright (c) 2013-2014, Arnaud Poret
-#All rights reserved.
-
 #how to:
 #    1) read the comments
 #    2) fill the template
@@ -14,6 +11,11 @@
 #Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling
 #networks. Biochemistry, 49(15):3216–3224, 2010.
 
+#The f_node of the inputs (i.e. the f_node set by the modeler, in the present
+#example f_EGF and f_HRG line 136 and 137 respectively) are rather rudimentarily
+#implemented in the lib/go.m file. This issue will be addressed as soon as
+#possible.
+
 clear all
 clc
 addpath("~/kali-sim/lib/")
@@ -22,13 +24,19 @@ addpath("~/kali-sim/lib/")
 #argument by "fltk"
 graphics_toolkit("gnuplot")
 
-global edge_label node_label
+global edge_label node_label k_EGF k_HRG
 
 #the number of iterations performed during a run
-kmax=50;
+k_end=50;
 
-#the number of times the run is repeated
-repeat=5;
+#the iteration at which the EGF perturbation begins
+k_EGF=k_end/10;
+
+#the iteration at which the HRG perturbation begins
+k_HRG=k_EGF;
+
+#the number of times the run is red
+r=10;
 
 #the edge names
 edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
@@ -49,7 +57,7 @@ plot_label=node_label;
 #    0: none (=0)
 #   -1: undetermined (0<=,<=1)
 node0=[
-5;#EGF
+0;#EGF
 0;#HRG
 0;#EGFR
 0;#PI3K
@@ -77,7 +85,7 @@ p=[
 3#Raf__ERK
 ];
 
-#for each edges, the weakening of its value applied at each iteration:
+#for each edges, the weakening of its value at each iteration:
 #    5: strong (=1)
 #    4: weaker (0.75<=,<=1)
 #    3: weak (0.5<=,<=0.75)
@@ -125,7 +133,7 @@ function y=f_node(edge,k)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    1;#EGF
+    0;#EGF
     0;#HRG
     OR(EGF__EGFR,HRG__EGFR);#EGFR
     AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
@@ -135,37 +143,5 @@ function y=f_node(edge,k)
     ];
 endfunction
 
-[edge,node]=go("f_edge","f_node",node0,kmax,p,q,repeat,plot_label);
+[edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label);
 
-################################################################################
-##############################       LICENSE      ##############################
-##############################    BSD 3-Clause    ##############################
-################################################################################
-
-#Copyright (c) 2013-2014, Arnaud Poret
-#All rights reserved.
-
-#Redistribution and use in source and binary forms, with or without modification,
-#are permitted provided that the following conditions are met:
-
-#1. Redistributions of source code must retain the above copyright notice, this
-#list of conditions and the following disclaimer.
-
-#2. Redistributions in binary form must reproduce the above copyright notice,
-#this list of conditions and the following disclaimer in the documentation and/or
-#other materials provided with the distribution.
-
-#3. Neither the name of the copyright holder nor the names of its contributors
-#may be used to endorse or promote products derived from this software without
-#specific prior written permission.
-
-#THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
-#ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-#WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-#DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
-#ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
-#(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-#LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
-#ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-#(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-#SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
