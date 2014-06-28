@@ -1,4 +1,4 @@
-#run("~/kali-sim/misc/example_network_xed.m")
+#octave --eval "run('~/kali-sim/misc/example_network_xed.m')"
 
 clear all
 clc

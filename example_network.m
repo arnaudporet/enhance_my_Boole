@@ -2,9 +2,8 @@
 #    1) read the comments
 #    2) fill the template
 #    3) open a terminal
-#    4) launch octave
-#    5) past this command: run("~/kali-sim/example_network.m")
-#    6) press Enter
+#    4) past this command: octave --eval "run('~/kali-sim/example_network.m')"
+#    5) press Enter
 
 #the example network is an implementation of a logical model used by Melody
 #K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and
