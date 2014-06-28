@@ -2,8 +2,6 @@
 #####################    Simulation of network dynamics    #####################
 ################################################################################
 
-/!\    work in progress    /!\
-
 1. clone the project in your home directory: ~/
 2. open the template file: ~/kali-sim/example_network.m
 
