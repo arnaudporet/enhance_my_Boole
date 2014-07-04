@@ -1,53 +1,62 @@
-#how to:
+# How to:
 #    1) read the comments
 #    2) fill the template
 #    3) open a terminal
 #    4) past this command: octave --eval "run('~/kali-sim/example_network.m')"
 #    5) press Enter
 
-#the example network is an implementation of a logical model used by Melody
-#K Morris et al: Melody K Morris, Julio Saez-Rodriguez, Peter K Sorger, and
-#Douglas A Lauffenburger. Logic-based models for the analysis of cell signaling
-#networks. Biochemistry, 49(15):3216–3224, 2010.
+# GNU Octave (http://www.gnu.org/software/octave/) is a high-level interpreted
+# language, primarily intended for numerical computations. 
 
-#The f_node of the inputs (i.e. the f_node set by the modeler, in the present
-#example f_EGF and f_HRG line 136 and 137 respectively) are rather rudimentarily
-#implemented in the lib/go.m file. This issue will be addressed as soon as
-#possible.
+# The example network is a tiny sample of the epidermal growth factor receptor
+# signaling pathway [1] adapted from [2].
+
+# [1] Oda, K., Matsuoka, Y., Funahashi, A., & Kitano, H. (2005). A comprehensive
+# pathway map of epidermal growth factor receptor signaling. Molecular systems
+# biology, 1(1).
+
+# [2] Morris, M. K., Saez-Rodriguez, J., Sorger, P. K., & Lauffenburger, D. A.
+# (2010). Logic-based models for the analysis of cell signaling networks.
+# Biochemistry, 49(15), 3216-3224.
+
+# The f_node of the inputs (i.e. the f_node set by the modeler, in the present
+# example f_EGF and f_HRG line 144 and 145 respectively) are rather
+# rudimentarily implemented in the lib/go.m file. This issue will be addressed
+# as soon as possible.
 
 clear all
 clc
 addpath("~/kali-sim/lib/")
 
-#if plotting with gnuplot goes wrong, or if you do not have gnuplot, replace the
-#argument by "fltk"
+# if plotting with gnuplot goes wrong, or if you do not have gnuplot
+# (http://www.gnuplot.info/), replace the argument by "fltk"
 graphics_toolkit("gnuplot")
 
 global edge_label node_label k_EGF k_HRG
 
-#the number of iterations performed during a run
+# the number of iterations performed during a run
 k_end=50;
 
-#the iteration at which the EGF perturbation begins
+# the iteration at which the EGF perturbation begins
 k_EGF=k_end/10;
 
-#the iteration at which the HRG perturbation begins
+# the iteration at which the HRG perturbation begins
 k_HRG=k_EGF;
 
-#the number of times the run is red
+# the number of times the run is replicated
 r=10;
 
-#the edge names
+# the edge names
 edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
 
-#the node names
+# the node names
 node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
 
-#the node names for the plot legends, for example if a node is named
-#"DNA_damage" it should be renamed "DNA damage" for the plot legends
+# the node names for the plot legends, for example if a node is named
+# "DNA_damage" it should be renamed "DNA damage" for the plot legends
 plot_label=node_label;
 
-#the node initial states:
+# the node initial states:
 #    5: full (=1)
 #    4: much more (0.75<=,<=1)
 #    3: much (0.5<=,<=0.75)
@@ -65,7 +74,7 @@ node0=[
 0#ERK
 ];
 
-#for each edges, the portion of its value which is updated at each iteration:
+# for each edges, the portion of its value which is updated at each iteration:
 #    5: instantaneous (=1)
 #    4: faster (0.75<=,<=1)
 #    3: fast (0.5<=,<=0.75)
@@ -84,7 +93,7 @@ p=[
 3#Raf__ERK
 ];
 
-#for each edges, the weakening of its value at each iteration:
+# for each edges, the weakening of its value at each iteration:
 #    5: strong (=1)
 #    4: weaker (0.75<=,<=1)
 #    3: weak (0.5<=,<=0.75)
@@ -103,9 +112,9 @@ q=[
 5#Raf__ERK
 ];
 
-#the function which update edge values at each iterations, for shorter
-#computation time, comment or delete the first four lines and replace
-#<node name> by node(<i>,k)
+# the function which update edge values at each iterations, for shorter
+# computation time, comment or delete the first four lines and replace
+# <node name> by node(<i>,k)
 function y=f_edge(node,k)
     global node_label
     for i_node=1:numel(node_label)
@@ -123,9 +132,9 @@ function y=f_edge(node,k)
     ];
 endfunction
 
-#the function which update node values at each iterations, for shorter
-#computation time, comment or delete the first four lines and replace
-#<edge name> by edge(<i>,k)
+# the function which update node values at each iterations, for shorter
+# computation time, comment or delete the first four lines and replace
+# <edge name> by edge(<i>,k)
 function y=f_node(edge,k)
     global edge_label
     for i_edge=1:numel(edge_label)
@@ -143,4 +152,3 @@ function y=f_node(edge,k)
 endfunction
 
 [edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label);
-
