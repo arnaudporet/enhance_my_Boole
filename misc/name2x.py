@@ -15,9 +15,9 @@ for i in range(len(node_equations)):
     for j in range(len(node_names)):
         if node_names[j]+"," in node_equations[i]:
             node_equations[i]=node_equations[i].replace(node_names[j]+",",node_names[j]+"__,")
-        elif node_names[j]+")" in node_equations[i]:
+        if node_names[j]+")" in node_equations[i]:
             node_equations[i]=node_equations[i].replace(node_names[j]+")",node_names[j]+"__)")
-        elif node_names[j]+";" in node_equations[i]:
+        if node_names[j]+";" in node_equations[i]:
             node_equations[i]=node_equations[i].replace(node_names[j]+";",node_names[j]+"__;")
     node_equations[i]=node_equations[i].replace("__","__"+node_names[i])
 
@@ -46,9 +46,9 @@ for i in range(len(node_equations)):
     for j in range(len(edge_names)):
         if edge_names[j]+"," in node_equations[i]:
             node_equations[i]=node_equations[i].replace(edge_names[j]+",","edge("+str(j+1)+",k),")
-        elif edge_names[j]+")" in node_equations[i]:
+        if edge_names[j]+")" in node_equations[i]:
             node_equations[i]=node_equations[i].replace(edge_names[j]+")","edge("+str(j+1)+",k))")
-        elif edge_names[j]+";" in node_equations[i]:
+        if edge_names[j]+";" in node_equations[i]:
             node_equations[i]=node_equations[i].replace(edge_names[j]+";","edge("+str(j+1)+",k);")
 
 lines=[]
@@ -59,4 +59,3 @@ for i in range(len(node_equations)):
     lines.append(node_equations[i]+"#"+node_names[i])
 
 open(output_file,"w").write("\""+"\",\"".join(edge_names)+"\"\n\n\""+"\",\"".join(node_names)+"\"\n\n;#"+"\n;#".join(edge_names)+"\n\n;#"+"\n;#".join(node_names)+"\n\n"+"\n".join(lines))
-
