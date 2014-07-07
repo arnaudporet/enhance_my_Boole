@@ -5,7 +5,8 @@
 
 How to:
     1) read my article (preprint version available at
-       http://hal.archives-ouvertes.fr/hal-01018236), at least the Method
+       http://hal.archives-ouvertes.fr/hal-01018236 and
+       http://arxiv.org/abs/1407.1135), at least the Method
        section
     2) clone the project in your home directory: ~/
     3) open the template file: ~/kali-sim/example_network.m
