@@ -2,8 +2,9 @@
 #    1) read the comments
 #    2) fill the template
 #    3) open a terminal
-#    4) past this command: octave --eval "run('~/kali-sim/example_network.m')"
-#    5) press Enter
+#    4) launch octave
+#    5) past this command: run("~/kali-sim/example_network.m")
+#    6) press Enter
 
 # GNU Octave (http://www.gnu.org/software/octave/) is a high-level interpreted
 # language, primarily intended for numerical computations. 
