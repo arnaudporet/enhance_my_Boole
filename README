@@ -8,8 +8,8 @@ How to:
        http://hal.archives-ouvertes.fr/hal-01018236 and
        http://arxiv.org/abs/1407.1135), at least the Method
        section
-    2) clone the project in your home directory: ~/
-    3) open the template file: ~/kali-sim/example_network.m
+    2) clone the project in your home directory ~/
+    3) open the template file ~/kali-sim/example_network.m
 
 The example network is a tiny sample of the epidermal growth factor receptor
 signaling pathway [1] adapted from [2].
