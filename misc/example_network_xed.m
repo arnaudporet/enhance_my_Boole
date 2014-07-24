@@ -1,27 +1,55 @@
-#octave --eval "run('~/kali-sim/misc/example_network_xed.m')"
+#run("~/kali-sim/misc/example_network_xed.m")
 
 clear all
 clc
 addpath("~/kali-sim/lib/")
 graphics_toolkit("gnuplot")
 
-global k_EGF k_HRG
+global edge_label node_label node0
 
-k_end=50;
-k_EGF=k_end/10;
-k_HRG=k_EGF;
+k_end=100;
 r=10;
 
 edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
 node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
 plot_label=node_label;
 
-#5: full (=1)
-#4: much more (0.75<=,<=1)
-#3: much (0.5<=,<=0.75)
-#2: few (0.25<=,<=0.5)
-#1: fewer (0<=,<=0.25)
-#0: none (=0)
+plot_all=1;
+
+# 5: full (=1)
+# 4: much more (0.75<=,<=1)
+# 3: much (0.5<=,<=0.75)
+# 2: few (0.25<=,<=0.5)
+# 1: fewer (0<=,<=0.25)
+# 0: none (=0)
+#-1: undetermined (0<=,<=1)
+#-2: no disturbance
+dist=[
+4;#EGF
+1;#HRG
+-2;#EGFR
+-2;#PI3K
+-2;#AKT
+-2;#Raf
+-2#ERK
+];
+
+k_dist=[
+1,4;#EGF
+6,9;#HRG
+-1,-1;#EGFR
+-1,-1;#PI3K
+-1,-1;#AKT
+-1,-1;#Raf
+-1,-1#ERK
+];
+
+# 5: full (=1)
+# 4: much more (0.75<=,<=1)
+# 3: much (0.5<=,<=0.75)
+# 2: few (0.25<=,<=0.5)
+# 1: fewer (0<=,<=0.25)
+# 0: none (=0)
 #-1: undetermined (0<=,<=1)
 node0=[
 0;#EGF
@@ -33,12 +61,12 @@ node0=[
 0#ERK
 ];
 
-#5: instantaneous (=1)
-#4: faster (0.75<=,<=1)
-#3: fast (0.5<=,<=0.75)
-#2: slow (0.25<=,<=0.5)
-#1: slower (0<=,<=0.25)
-#0: down (=0)
+# 5: instantaneous (=1)
+# 4: faster (0.75<=,<=1)
+# 3: fast (0.5<=,<=0.75)
+# 2: slow (0.25<=,<=0.5)
+# 1: slower (0<=,<=0.25)
+# 0: down (=0)
 #-1: undetermined (0<=,<=1)
 p=[
 3;#EGF__EGFR
@@ -51,12 +79,12 @@ p=[
 3#Raf__ERK
 ];
 
-#5: strong (=1)
-#4: weaker (0.75<=,<=1)
-#3: weak (0.5<=,<=0.75)
-#2: faint (0.25<=,<=0.5)
-#1: fainter (0<=,<=0.25)
-#0: down (=0)
+# 5: strong (=1)
+# 4: weaker (0.75<=,<=1)
+# 3: weak (0.5<=,<=0.75)
+# 2: faint (0.25<=,<=0.5)
+# 1: fainter (0<=,<=0.25)
+# 0: down (=0)
 #-1: undetermined (0<=,<=1)
 q=[
 5;#EGF__EGFR
@@ -83,9 +111,10 @@ function y=f_edge(node,k)
 endfunction
 
 function y=f_node(edge,k)
+    global node0
     y=[
-    0;#EGF
-    0;#HRG
+    node0(1,1);#EGF
+    node0(2,1);#HRG
     OR(edge(1,k),edge(2,k));#EGFR
     AND(edge(3,k),NOT(edge(4,k)));#PI3K
     edge(5,k);#AKT
@@ -94,5 +123,37 @@ function y=f_node(edge,k)
     ];
 endfunction
 
-[edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label);
+[edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label,dist,k_dist,plot_all);
 
+if not(plot_all)
+    figure(1)
+    clf(1)
+    for i_r=1:r
+        NODE(i_r,:)=node(1,:,i_r);
+    endfor
+    subplot(2,2,1)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{1})
+    for i_r=1:r
+        NODE(i_r,:)=node(3,:,i_r);
+    endfor
+    subplot(2,2,2)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{3})
+    for i_r=1:r
+        NODE(i_r,:)=node(4,:,i_r);
+    endfor
+    subplot(2,2,3)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{4})
+    for i_r=1:r
+        NODE(i_r,:)=node(7,:,i_r);
+    endfor
+    subplot(2,2,4)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{7})
+endif
