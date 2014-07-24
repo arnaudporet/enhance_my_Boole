@@ -18,11 +18,6 @@
 # (2010). Logic-based models for the analysis of cell signaling networks.
 # Biochemistry, 49(15), 3216-3224.
 
-# The f_node of the inputs (i.e. the f_node set by the modeler, in the present
-# example f_EGF and f_HRG line 144 and 145 respectively) are rather
-# rudimentarily implemented in the lib/go.m file. This issue will be addressed
-# as soon as possible.
-
 clear all
 clc
 addpath("~/kali-sim/lib/")
@@ -31,16 +26,10 @@ addpath("~/kali-sim/lib/")
 # (http://www.gnuplot.info/), replace the argument by "fltk"
 graphics_toolkit("gnuplot")
 
-global edge_label node_label k_EGF k_HRG
+global edge_label node_label node0
 
 # the number of iterations performed during a run
-k_end=50;
-
-# the iteration at which the EGF perturbation begins
-k_EGF=k_end/10;
-
-# the iteration at which the HRG perturbation begins
-k_HRG=k_EGF;
+k_end=100;
 
 # the number of times the run is replicated
 r=10;
@@ -54,6 +43,40 @@ node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
 # the node names for the plot legends, for example if a node is named
 # "DNA_damage" it should be renamed "DNA damage" for the plot legends
 plot_label=node_label;
+
+# automatically plot all nodes (1: yes, 0: no)
+plot_all=1;
+
+# the node disturbed states:
+#    5: full (=1)
+#    4: much more (0.75<=,<=1)
+#    3: much (0.5<=,<=0.75)
+#    2: few (0.25<=,<=0.5)
+#    1: fewer (0<=,<=0.25)
+#    0: none (=0)
+#   -1: undetermined (0<=,<=1)
+#   -2: no disturbance
+dist=[
+4;#EGF
+1;#HRG
+-2;#EGFR
+-2;#PI3K
+-2;#AKT
+-2;#Raf
+-2#ERK
+];
+
+# the iteration at which disturbances begin and end respectively, in tenth of
+# k_end (-1 for undisturbed nodes)
+k_dist=[
+1,4;#EGF
+6,9;#HRG
+-1,-1;#EGFR
+-1,-1;#PI3K
+-1,-1;#AKT
+-1,-1;#Raf
+-1,-1#ERK
+];
 
 # the node initial states:
 #    5: full (=1)
@@ -135,13 +158,13 @@ endfunction
 # computation time, comment or delete the first four lines and replace
 # <edge name> by edge(<i>,k)
 function y=f_node(edge,k)
-    global edge_label
+    global edge_label node0
     for i_edge=1:numel(edge_label)
         eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
     endfor
     y=[
-    0;#EGF
-    0;#HRG
+    node0(1,1);#EGF
+    node0(2,1);#HRG
     OR(EGF__EGFR,HRG__EGFR);#EGFR
     AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
     PI3K__AKT;#AKT
@@ -150,5 +173,39 @@ function y=f_node(edge,k)
     ];
 endfunction
 
-[edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label);
+[edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label,dist,k_dist,plot_all);
 
+# if not automatically plot all nodes (plot_all=0), plot your own such as EGF,
+# EGFR, PI3K and ERK
+if not(plot_all)
+    figure(1)
+    clf(1)
+    for i_r=1:r
+        NODE(i_r,:)=node(1,:,i_r);
+    endfor
+    subplot(2,2,1)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{1})
+    for i_r=1:r
+        NODE(i_r,:)=node(3,:,i_r);
+    endfor
+    subplot(2,2,2)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{3})
+    for i_r=1:r
+        NODE(i_r,:)=node(4,:,i_r);
+    endfor
+    subplot(2,2,3)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{4})
+    for i_r=1:r
+        NODE(i_r,:)=node(7,:,i_r);
+    endfor
+    subplot(2,2,4)
+    plot((1:k_end)',NODE')
+    axis([1,k_end,-0.1,1.1],"ticy","labely")
+    title(plot_label{7})
+endif
