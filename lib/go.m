@@ -8,7 +8,7 @@ function [edge,node]=go(f_edge,f_node,node0,k_end,p,q,r,plot_label,dist,k_dist,p
         dist_bis=(dist==-1).*unifrnd(0,1,size(dist,1),1)+(dist==0)*0+(dist==1).*unifrnd(0,0.25,size(dist,1),1)+(dist==2).*unifrnd(0.25,0.5,size(dist,1),1)+(dist==3).*unifrnd(0.5,0.75,size(dist,1),1)+(dist==4).*unifrnd(0.75,1,size(dist,1),1)+(dist==5)*1;
         for k=1:k_end-1
             edge(:,k+1,i_r)=(1-p_bis).*edge(:,k,i_r)+q_bis.*p_bis.*feval(f_edge,node(:,:,i_r),k);
-            node(:,k+1,i_r)=not(and(k_dist(:,1)<=k,k<=k_dist(:,2))).*feval(f_node,edge(:,:,i_r),k)+and(k_dist(:,1)<=k,k<=k_dist(:,2)).*dist_bis;
+            node(:,k+1,i_r)=not(and(k_dist(:,1)<=k,k<=k_dist(:,2))).*feval(f_node,edge(:,:,i_r),k,node(:,:,i_r))+and(k_dist(:,1)<=k,k<=k_dist(:,2)).*dist_bis;
         endfor
     endfor
     if plot_all
@@ -28,3 +28,4 @@ function [edge,node]=go(f_edge,f_node,node0,k_end,p,q,r,plot_label,dist,k_dist,p
         endfor
     endif
 endfunction
+

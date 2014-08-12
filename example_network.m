@@ -26,7 +26,7 @@ addpath("~/kali-sim/lib/")
 # (http://www.gnuplot.info/), replace the argument by "fltk"
 graphics_toolkit("gnuplot")
 
-global edge_label node_label node0
+global edge_label node_label
 
 # the number of iterations performed during a run
 k_end=100;
@@ -58,7 +58,7 @@ plot_all=1;
 #   -2: no disturbance
 dist=[
 4;#EGF
-1;#HRG
+-2;#HRG
 -2;#EGFR
 -2;#PI3K
 -2;#AKT
@@ -69,8 +69,8 @@ dist=[
 # the iteration at which disturbances begin and end respectively, in tenth of
 # k_end (-1 for undisturbed nodes)
 k_dist=[
-1,4;#EGF
-6,9;#HRG
+2,6;#EGF
+-1,-1;#HRG
 -1,-1;#EGFR
 -1,-1;#PI3K
 -1,-1;#AKT
@@ -87,13 +87,13 @@ k_dist=[
 #    0: none (=0)
 #   -1: undetermined (0<=,<=1)
 node0=[
-0;#EGF
-0;#HRG
-0;#EGFR
-0;#PI3K
-0;#AKT
-0;#Raf
-0#ERK
+1;#EGF
+1;#HRG
+1;#EGFR
+1;#PI3K
+1;#AKT
+1;#Raf
+1#ERK
 ];
 
 # for each edges, the portion of its value which is updated at each iteration:
@@ -124,15 +124,34 @@ p=[
 #    0: down (=0)
 #   -1: undetermined (0<=,<=1)
 q=[
-5;#EGF__EGFR
-5;#HRG__EGFR
-5;#EGFR__PI3K
-5;#ERK__PI3K
-5;#PI3K__AKT
-5;#EGFR__Raf
-5;#AKT__Raf
-5#Raf__ERK
+4;#EGF__EGFR
+4;#HRG__EGFR
+4;#EGFR__PI3K
+4;#ERK__PI3K
+4;#PI3K__AKT
+4;#EGFR__Raf
+4;#AKT__Raf
+4#Raf__ERK
 ];
+
+# the function which update node values at each iterations, for shorter
+# computation time, comment or delete the first four lines and replace
+# <edge name> by edge(<i>,k)
+function y=f_node(edge,k,node)
+    global edge_label
+    for i_edge=1:numel(edge_label)
+        eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
+    endfor
+    y=[
+    node(1,1);#EGF
+    node(2,1);#HRG
+    OR(EGF__EGFR,HRG__EGFR);#EGFR
+    AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
+    PI3K__AKT;#AKT
+    OR(EGFR__Raf,AKT__Raf);#Raf
+    Raf__ERK#ERK
+    ];
+endfunction
 
 # the function which update edge values at each iterations, for shorter
 # computation time, comment or delete the first four lines and replace
@@ -151,25 +170,6 @@ function y=f_edge(node,k)
     EGFR;#EGFR__Raf
     AKT;#AKT__Raf
     Raf#Raf__ERK
-    ];
-endfunction
-
-# the function which update node values at each iterations, for shorter
-# computation time, comment or delete the first four lines and replace
-# <edge name> by edge(<i>,k)
-function y=f_node(edge,k)
-    global edge_label node0
-    for i_edge=1:numel(edge_label)
-        eval(strcat(edge_label{i_edge},"=edge(",num2str(i_edge),",k);"))
-    endfor
-    y=[
-    node0(1,1);#EGF
-    node0(2,1);#HRG
-    OR(EGF__EGFR,HRG__EGFR);#EGFR
-    AND(EGFR__PI3K,NOT(ERK__PI3K));#PI3K
-    PI3K__AKT;#AKT
-    OR(EGFR__Raf,AKT__Raf);#Raf
-    Raf__ERK#ERK
     ];
 endfunction
 
@@ -209,3 +209,4 @@ if not(plot_all)
     axis([1,k_end,-0.1,1.1],"ticy","labely")
     title(plot_label{7})
 endif
+
