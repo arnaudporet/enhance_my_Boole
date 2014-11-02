@@ -28,4 +28,3 @@ function [edge,node]=go(f_edge,f_node,node0,k_end,p,q,r,plot_label,dist,k_dist,p
         endfor
     endif
 endfunction
-

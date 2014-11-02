@@ -4,4 +4,3 @@ function y=OR(varargin)
         y=y+varargin{i_varargin}-y*varargin{i_varargin};
     endfor
 endfunction
-

@@ -4,4 +4,3 @@ function y=AND(varargin)
         y=y*varargin{i_varargin};
     endfor
 endfunction
-
