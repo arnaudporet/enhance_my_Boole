@@ -1,3 +1,4 @@
+
 input_file=input("input file: ")
 output_file=input("output file: ")
 
@@ -59,3 +60,4 @@ for i in range(len(node_equations)):
     lines.append(node_equations[i]+"#"+node_names[i])
 
 open(output_file,"w").write("\""+"\",\"".join(edge_names)+"\"\n\n\""+"\",\"".join(node_names)+"\"\n\n;#"+"\n;#".join(edge_names)+"\n\n;#"+"\n;#".join(node_names)+"\n\n"+"\n".join(lines))
+
