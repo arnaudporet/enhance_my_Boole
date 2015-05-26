@@ -9,14 +9,27 @@ Arnaud Poret: arnaud.poret@gmail.com
 If you are interested in my work, or ultimately if you use it, feel free to let
 me know.
 
+#######################    RECOMMENDED PREREQUISITES    ########################
+
+Operating system: Linux, such as Ubuntu (http://www.ubuntu.com/)
+
+GNU Octave: http://www.gnu.org/software/octave/
+
+gnuplot: http://www.gnuplot.info/
+
+Text editor: provided that it handle GNU Octave syntax highlighting, such as
+Gedit (https://wiki.gnome.org/Apps/Gedit)
+
+Distributed version control system: Git (http://git-scm.com/)
+
 #################################    HOWTO    ##################################
 
 1) read my article: freely available at http://arxiv.org/abs/1407.1135 or
    https://hal.archives-ouvertes.fr/hal-01018236
 
-2) clone kali-sim:
-       git clone https://github.com/arnaudporet/kali-sim.git
-   or download it if you do not use Git:
+2) clone kali-sim in your home directory:
+       cd ~/ && git clone https://github.com/arnaudporet/kali-sim.git
+   or download it in your home directory if you do not use Git:
        https://github.com/arnaudporet/kali-sim/archive/master.zip
    but I strongly encourage you to use Git
 

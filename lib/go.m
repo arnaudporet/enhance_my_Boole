@@ -3,12 +3,12 @@ function [edge,node]=go(f_edge,f_node,node0,k_end,p,q,r,plot_label,dist,k_dist,p
     for i_r=1:r
         node(:,1,i_r)=(node0==-1).*unifrnd(0,1,size(node0,1),1)+(node0==0)*0+(node0==1).*unifrnd(0,0.25,size(node0,1),1)+(node0==2).*unifrnd(0.25,0.5,size(node0,1),1)+(node0==3).*unifrnd(0.5,0.75,size(node0,1),1)+(node0==4).*unifrnd(0.75,1,size(node0,1),1)+(node0==5)*1;
         edge(:,1,i_r)=feval(f_edge,node(:,:,i_r),1);
-        p_bis=(p==-1).*unifrnd(0,1,size(edge,1),1)+(p==0)*0+(p==1).*unifrnd(0,0.25,size(edge,1),1)+(p==2).*unifrnd(0.25,0.5,size(edge,1),1)+(p==3).*unifrnd(0.5,0.75,size(edge,1),1)+(p==4).*unifrnd(0.75,1,size(edge,1),1)+(p==5)*1;
-        q_bis=(q==-1).*unifrnd(0,1,size(edge,1),1)+(q==0)*0+(q==1).*unifrnd(0,0.25,size(edge,1),1)+(q==2).*unifrnd(0.25,0.5,size(edge,1),1)+(q==3).*unifrnd(0.5,0.75,size(edge,1),1)+(q==4).*unifrnd(0.75,1,size(edge,1),1)+(q==5)*1;
-        dist_bis=(dist==-1).*unifrnd(0,1,size(dist,1),1)+(dist==0)*0+(dist==1).*unifrnd(0,0.25,size(dist,1),1)+(dist==2).*unifrnd(0.25,0.5,size(dist,1),1)+(dist==3).*unifrnd(0.5,0.75,size(dist,1),1)+(dist==4).*unifrnd(0.75,1,size(dist,1),1)+(dist==5)*1;
+        pp=(p==-1).*unifrnd(0,1,size(p,1),1)+(p==0)*0+(p==1).*unifrnd(0,0.25,size(p,1),1)+(p==2).*unifrnd(0.25,0.5,size(p,1),1)+(p==3).*unifrnd(0.5,0.75,size(p,1),1)+(p==4).*unifrnd(0.75,1,size(p,1),1)+(p==5)*1;
+        qq=(q==-1).*unifrnd(0,1,size(q,1),1)+(q==0)*0+(q==1).*unifrnd(0,0.25,size(q,1),1)+(q==2).*unifrnd(0.25,0.5,size(q,1),1)+(q==3).*unifrnd(0.5,0.75,size(q,1),1)+(q==4).*unifrnd(0.75,1,size(q,1),1)+(q==5)*1;
+        dd=(dist==-1).*unifrnd(0,1,size(dist,1),1)+(dist==0)*0+(dist==1).*unifrnd(0,0.25,size(dist,1),1)+(dist==2).*unifrnd(0.25,0.5,size(dist,1),1)+(dist==3).*unifrnd(0.5,0.75,size(dist,1),1)+(dist==4).*unifrnd(0.75,1,size(dist,1),1)+(dist==5)*1;
         for k=1:k_end-1
-            edge(:,k+1,i_r)=(1-p_bis).*edge(:,k,i_r)+q_bis.*p_bis.*feval(f_edge,node(:,:,i_r),k);
-            node(:,k+1,i_r)=not(and(k_dist(:,1)<=k,k<=k_dist(:,2))).*feval(f_node,edge(:,:,i_r),k,node(:,:,i_r))+and(k_dist(:,1)<=k,k<=k_dist(:,2)).*dist_bis;
+            edge(:,k+1,i_r)=(1-pp).*edge(:,k,i_r)+qq.*pp.*feval(f_edge,node(:,:,i_r),k);
+            node(:,k+1,i_r)=not(and(k_dist(:,1)<=k,k<=k_dist(:,2))).*feval(f_node,edge(:,:,i_r),k,node(:,:,i_r))+and(k_dist(:,1)<=k,k<=k_dist(:,2)).*dd;
         endfor
     endfor
     if plot_all

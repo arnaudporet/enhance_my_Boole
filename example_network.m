@@ -1,38 +1,26 @@
-# How to:
-#    1) read the comments
-#    2) fill the template
-#    3) launch octave: cd ~/kali-sim/ && octave
-#    4) run: run("~/kali-sim/example_network.m")
+#################################    HOWTO    ##################################
 
-# GNU Octave (http://www.gnu.org/software/octave/) is a high-level interpreted
-# language, primarily intended for numerical computations. 
+# 1) read the comments
+# 2) fill the template
+# 3) launch octave: cd ~/kali-sim/ && octave
+# 4) run: run("./example_network.m")
 
-# The example network is a tiny sample of the epidermal growth factor receptor
-# signaling pathway [1] adapted from [2].
-
-# [1] Oda, K., Matsuoka, Y., Funahashi, A., & Kitano, H. (2005). A comprehensive
-# pathway map of epidermal growth factor receptor signaling. Molecular systems
-# biology, 1(1).
-
-# [2] Morris, M. K., Saez-Rodriguez, J., Sorger, P. K., & Lauffenburger, D. A.
-# (2010). Logic-based models for the analysis of cell signaling networks.
-# Biochemistry, 49(15), 3216-3224.
+################################################################################
 
 clear all
 clc
-addpath("~/kali-sim/lib/")
+addpath("./lib/")
 
-# if plotting with gnuplot goes wrong, or if you do not have gnuplot
-# (http://www.gnuplot.info/), replace the argument by "fltk"
+# if you do not use gnuplot, replace "gnuplot" by "fltk"
 graphics_toolkit("gnuplot")
 
 global edge_label node_label
 
 # the number of iterations performed during a run
-k_end=100;
+k_end=50;
 
 # the number of times the run is replicated
-r=10;
+r=3;
 
 # the edge names
 edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__Raf","AKT__Raf","Raf__ERK"};
@@ -40,11 +28,11 @@ edge_label={"EGF__EGFR","HRG__EGFR","EGFR__PI3K","ERK__PI3K","PI3K__AKT","EGFR__
 # the node names
 node_label={"EGF","HRG","EGFR","PI3K","AKT","Raf","ERK"};
 
-# the node names for the plot legends, for example if a node is named
-# "DNA_damage" it should be renamed "DNA damage" for the plot legends
+# the node names for the plot legend (for example, if a node is named
+# "DNA_damage" then it should be renamed "DNA damage" for the plot legend)
 plot_label=node_label;
 
-# automatically plot all nodes (1: yes, 0: no)
+# automatically plots all the nodes (1: yes, 0: no)
 plot_all=1;
 
 # the node disturbed states:
@@ -66,10 +54,10 @@ dist=[
 -2#ERK
 ];
 
-# the iteration at which disturbances begin and end respectively, in tenth of
-# k_end (-1 for undisturbed nodes)
+# the iteration at which the disturbances begin and end respectively, in tenth
+# of k_end (-1 for undisturbed nodes)
 k_dist=[
-2,6;#EGF
+2,7;#EGF
 -1,-1;#HRG
 -1,-1;#EGFR
 -1,-1;#PI3K
@@ -87,16 +75,17 @@ k_dist=[
 #    0: none (=0)
 #   -1: undetermined (0<=,<=1)
 node0=[
-1;#EGF
-1;#HRG
-1;#EGFR
-1;#PI3K
-1;#AKT
-1;#Raf
-1#ERK
+0;#EGF
+0;#HRG
+0;#EGFR
+0;#PI3K
+0;#AKT
+0;#Raf
+0#ERK
 ];
 
-# for each edges, the portion of its value which is updated at each iteration:
+# for each edge, the portion of its value which is updated at each
+# iteration (edge reactivity):
 #    5: instantaneous (=1)
 #    4: faster (0.75<=,<=1)
 #    3: fast (0.5<=,<=0.75)
@@ -115,28 +104,28 @@ p=[
 3#Raf__ERK
 ];
 
-# for each edges, the weakening of its value at each iteration:
+# for each edge, the weakening of its value at each iteration (edge weakening):
 #    5: strong (=1)
-#    4: weaker (0.75<=,<=1)
-#    3: weak (0.5<=,<=0.75)
+#    4: weak (0.75<=,<=1)
+#    3: weaker (0.5<=,<=0.75)
 #    2: faint (0.25<=,<=0.5)
 #    1: fainter (0<=,<=0.25)
 #    0: down (=0)
 #   -1: undetermined (0<=,<=1)
 q=[
-4;#EGF__EGFR
-4;#HRG__EGFR
-4;#EGFR__PI3K
-4;#ERK__PI3K
-4;#PI3K__AKT
-4;#EGFR__Raf
-4;#AKT__Raf
-4#Raf__ERK
+5;#EGF__EGFR
+5;#HRG__EGFR
+5;#EGFR__PI3K
+5;#ERK__PI3K
+5;#PI3K__AKT
+5;#EGFR__Raf
+5;#AKT__Raf
+5#Raf__ERK
 ];
 
-# the function which update node values at each iterations, for shorter
-# computation time, comment or delete the first four lines and replace
-# <edge name> by edge(<i>,k)
+# the function which updates the node values at each iterations
+# for a shorter computation time, comment the first four lines of this
+# function (the same for line 17) and replace <edge name> by edge(<i>,k)
 function y=f_node(edge,k,node)
     global edge_label
     for i_edge=1:numel(edge_label)
@@ -153,9 +142,9 @@ function y=f_node(edge,k,node)
     ];
 endfunction
 
-# the function which update edge values at each iterations, for shorter
-# computation time, comment or delete the first four lines and replace
-# <node name> by node(<i>,k)
+# the function which updates the edge values at each iterations
+# for a shorter computation time, comment the first four lines of this
+# function (the same for line 17) and replace <node name> by node(<i>,k)
 function y=f_edge(node,k)
     global node_label
     for i_node=1:numel(node_label)
@@ -175,8 +164,8 @@ endfunction
 
 [edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label,dist,k_dist,plot_all);
 
-# if not automatically plot all nodes (plot_all=0), plot your own such as EGF,
-# EGFR, PI3K and ERK
+# if not automatically plots all the nodes (plot_all=0, line 36) then plot your
+# own, such as EGF, EGFR, PI3K and ERK
 if not(plot_all)
     figure(1)
     clf(1)
@@ -209,4 +198,3 @@ if not(plot_all)
     axis([1,k_end,-0.1,1.1],"ticy","labely")
     title(plot_label{7})
 endif
-
