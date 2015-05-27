@@ -2,8 +2,10 @@
 
 # 1) read the comments
 # 2) fill the template
-# 3) launch octave: cd ~/kali-sim/ && octave
-# 4) run: run("./example_network.m")
+# 3) launch octave:
+#        cd ~/kali-sim/ && octave
+# 4) run:
+#        run("./example_network.m")
 
 ################################################################################
 
@@ -54,7 +56,7 @@ dist=[
 -2#ERK
 ];
 
-# the iteration at which the disturbances begin and end respectively, in tenth
+# the iterations at which the disturbances begin and end respectively, in tenth
 # of k_end (-1 for undisturbed nodes)
 k_dist=[
 2,7;#EGF
@@ -123,9 +125,9 @@ q=[
 5#Raf__ERK
 ];
 
-# the function which updates the node values at each iterations
+# the function which updates the node values at each iteration
 # for a shorter computation time, comment the first four lines of this
-# function (the same for line 17) and replace <edge name> by edge(<i>,k)
+# function (the same for line 19) and replace <edge name> by edge(<i>,k)
 function y=f_node(edge,k,node)
     global edge_label
     for i_edge=1:numel(edge_label)
@@ -142,9 +144,9 @@ function y=f_node(edge,k,node)
     ];
 endfunction
 
-# the function which updates the edge values at each iterations
+# the function which updates the edge values at each iteration
 # for a shorter computation time, comment the first four lines of this
-# function (the same for line 17) and replace <node name> by node(<i>,k)
+# function (the same for line 19) and replace <node name> by node(<i>,k)
 function y=f_edge(node,k)
     global node_label
     for i_node=1:numel(node_label)
@@ -164,7 +166,7 @@ endfunction
 
 [edge,node]=go("f_edge","f_node",node0,k_end,p,q,r,plot_label,dist,k_dist,plot_all);
 
-# if not automatically plots all the nodes (plot_all=0, line 36) then plot your
+# if not automatically plots all the nodes (plot_all=0, line 38) then plot your
 # own, such as EGF, EGFR, PI3K and ERK
 if not(plot_all)
     figure(1)
