@@ -15,8 +15,6 @@ Operating system: Linux, such as Ubuntu (http://www.ubuntu.com/)
 
 GNU Octave: http://www.gnu.org/software/octave/
 
-gnuplot: http://www.gnuplot.info/
-
 Text editor: provided that it handle GNU Octave syntax highlighting, such as
 Gedit (https://wiki.gnome.org/Apps/Gedit)
 
