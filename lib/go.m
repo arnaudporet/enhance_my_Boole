@@ -1,3 +1,6 @@
+% Copyright (c) 2014-2016, Arnaud Poret
+% All rights reserved.
+% This work is licensed under the BSD 2-Clause License.
 function [edge,node]=go(f_edge,f_node,node0,k_end,p,q,r,plot_label,dist,k_dist,plot_all)
     k_dist=k_dist.*k_end/10;
     for i_r=1:r
