@@ -4,13 +4,14 @@
 
 %#### HOWTO ###################################################################%
 
-% 1) read my article (all is explained inside), freely available at:
-%     * https://arxiv.org/abs/1407.1135
-%     * https://hal.archives-ouvertes.fr/hal-01018236
+% 1) read my article (all is explained inside), freely available on:
+%     * arXiv: http://arxiv.org/abs/1407.1135
+%     * HAL: http://hal.archives-ouvertes.fr/hal-01018236
 % 2) read the following comments
 % 3) replace the contents with your own stuff
 % 4) launch octave
-% 5) run: run("example_network.m")
+% 5) run (tested with Octave version 4.0.0 under Arch Linux):
+%     * run("example_network.m")
 
 % This example is a tiny sample of the epidermal growth factor receptor
 % signaling pathway taken from [1].
