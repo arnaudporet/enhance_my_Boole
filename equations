@@ -1,0 +1,7 @@
+EGF=;
+HRG=;
+EGFR=or(EGF,HRG);
+Raf=or(EGFR,AKT);
+ERK=Raf;
+PI3K=and(EGFR,not(ERK));
+AKT=PI3K;

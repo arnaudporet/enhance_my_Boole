@@ -1,0 +1,24 @@
+edge names:
+"EGF__EGFR","HRG__EGFR","EGFR__Raf","AKT__Raf","Raf__ERK","EGFR__PI3K","ERK__PI3K","PI3K__AKT"
+
+node names:
+"EGF","HRG","EGFR","Raf","ERK","PI3K","AKT"
+
+edge equations:
+node[1,k],# EGF__EGFR
+node[2,k],# HRG__EGFR
+node[3,k],# EGFR__Raf
+node[7,k],# AKT__Raf
+node[4,k],# Raf__ERK
+node[3,k],# EGFR__PI3K
+node[5,k],# ERK__PI3K
+node[6,k]# PI3K__AKT
+
+node equations:
+,# EGF
+,# HRG
+or(edge[1,k],edge[2,k]),# EGFR
+or(edge[3,k],edge[4,k]),# Raf
+edge[5,k],# ERK
+and(edge[6,k],not(edge[7,k])),# PI3K
+edge[8,k]# AKT
