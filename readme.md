@@ -25,3 +25,7 @@ This work is tested with [R](https://www.r-project.org/) version 3.2.4 under [Ar
 How to get R: https://www.r-project.org/
 
 Most [Linux distributions](https://distrowatch.com/) provide R in their official repositories.
+
+# Forthcoming
+
+* none, for the time being
