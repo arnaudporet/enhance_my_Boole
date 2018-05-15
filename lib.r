@@ -1,33 +1,57 @@
-not<-function(x) {
-    return(1-x)
+# Copyright 2014-2018 Arnaud Poret
+# This work is licensed under the 2-Clause BSD License.
+# To view a copy of this license, visit https://opensource.org/licenses/BSD-2-Clause
+
+# continuous logical NOT operator
+# here the algebraic formulation is used
+not<-function(a) {
+    return(1-a)
 }
-and<-function(...) {
-    x<-c(...)
+
+# continuous logical AND operator
+# here the algebraic formulation is used
+# note that it accepts two or more arguments
+and<-function(a,b,...) {
+    x<-c(a,b,...)
     y<-x[1]
     for(i in seq(2,length(x))) {
         y<-y*x[i]
     }
     return(y)
 }
-or<-function(...) {
-    x<-c(...)
+
+# continuous logical OR operator
+# here the algebraic formulation is used
+# note that it accepts two or more arguments
+or<-function(a,b,...) {
+    x<-c(a,b,...)
     y<-x[1]
     for(i in seq(2,length(x))) {
         y<-y+x[i]-y*x[i]
     }
     return(y)
 }
-dothejob<-function(fedge,fnode,node0,kend,r,w,plotall,plotpercol,nodelab) {
+
+# main function: performs the simulation
+dothejob<-function(node0,r,w,kend,nedge,nnode,nodelab,plotall,printall) {
     node<-as.matrix(node0)
-    edge<-as.matrix(fedge(node,1))
-    for(k in seq(kend-1)) {
-        edge<-cbind(edge,(1-r)*edge[,k]+r*w*fedge(node,k))
-        node<-cbind(node,fnode(edge,k))
+    edge<-as.matrix(fedge(node,1,nedge))
+    for(k in seq(2,kend)) {
+        edge<-cbind(edge,as.matrix((1-r)*edge[,k-1]+r*w*fedge(node,k-1,nedge)))
+        node<-cbind(node,as.matrix(fnode(edge,k-1,nnode)))
     }
-    if(plotall==1) {
-        par(mfrow=c(ceiling(nrow(node)/plotpercol),plotpercol),xaxt="n",yaxt="n")
-        for(i in seq(nrow(node))) {
+    if(plotall) {
+        for(i in seq(ceiling(nnode/9))) {
+            dev.new()
+            par(mfrow=c(3,3))
+        }
+        for(i in seq(nnode)) {
+            nplot<-ceiling(i/9)
+            dev.set(nplot+1)
             plot(node[i,],type="l",main=nodelab[i],ylim=c(0,1),xlab="",ylab="")
+            if(printall) {
+                dev.print(device=svg,filename=paste("plot",as.character(nplot),".svg",sep=""))
+            }
         }
     }
     return(node)
