@@ -1,5 +1,5 @@
 # Copyright 2014-2018 Arnaud Poret
-# This work is licensed under the 2-Clause BSD License.
+# This work is licensed under the BSD 2-Clause License.
 # To view a copy of this license, visit https://opensource.org/licenses/BSD-2-Clause
 
 #### HOWTO #####################################################################
@@ -11,8 +11,11 @@
 # 3) read these files (edge.r, node.r and example.r)
 # 4) replace their content with your own stuff
 # 5) launch R
-# 6) run (tested with R version 3.5.0 under Arch Linux):
-#     source("example.r")
+# 6) run ``source("example.r")''
+
+# Plotted results produced by the present example are available in the file example_plot.svg.
+
+# Tested with R version 3.5.0 under Arch Linux.
 
 # This example is a tiny sample of the epidermal growth factor receptor signaling pathway taken from [1].
 
@@ -35,7 +38,7 @@ kend<-100
 plotall<-TRUE
 
 # if all the plots should be automatically saved
-# only relevant if plotall<-TRUE
+# only relevant if plotall=TRUE
 # here the SVG file format is used
 printall<-FALSE
 

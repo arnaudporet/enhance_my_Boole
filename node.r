@@ -1,5 +1,5 @@
 # Copyright 2014-2018 Arnaud Poret
-# This work is licensed under the 2-Clause BSD License.
+# This work is licensed under the BSD 2-Clause License.
 # To view a copy of this license, visit https://opensource.org/licenses/BSD-2-Clause
 
 # number of nodes
@@ -20,7 +20,7 @@ nodelab[5]<-"ERK"
 nodelab[6]<-"PI3K"
 nodelab[7]<-"AKT"
 
-# initial states of nodes
+# node initial states
 # here randomly selected between 0 and 0.1 as example
 node0[1]<-runif(1,0,0.1)# EGF
 node0[2]<-runif(1,0,0.1)# HRG
@@ -34,11 +34,11 @@ node0[7]<-runif(1,0,0.1)# AKT
 # for all nodes and at each iteration of the simulation: the function which calculates their updated states
 # EGF and HRG are the two inputs of this example
 # as such, they are set manually:
-#     EGF is activated from 20% to 60% of the simulation, otherwise it is inactivated (i.e. equals to its initial state)
-#     HRG is not activated (i.e. equals to its initial state)
+#     EGF is activated from 20% to 60% of the simulation, otherwise it is inactive (i.e. equals to its initial state)
+#     HRG is not active (i.e. equals to its initial state)
 fnode<-function(edge,k,nnode) {
     y<-vector(mode="numeric",length=nnode)
-    if((2*kend/10)<=k && k<=(6*kend/10)) {
+    if(0.2*kend<=k && k<=0.6*kend) {
         y[1]<-1# EGF
     } else {
         y[1]<-node0[1]# EGF

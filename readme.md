@@ -2,7 +2,7 @@
 
 Copyright 2014-2018 [Arnaud Poret](https://github.com/arnaudporet)
 
-This work is licensed under the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause).
+This work is licensed under the [BSD 2-Clause License](https://opensource.org/licenses/BSD-2-Clause).
 
 ## How to
 
@@ -12,7 +12,7 @@ This work is licensed under the [2-Clause BSD License](https://opensource.org/li
     * or [download](https://github.com/arnaudporet/smoosim/archive/master.zip) it if you do not use [Git](https://git-scm.com)
 3. read the file `example.r`
 
-This work is implemented with [R](https://www.r-project.org).
+This work is implemented with [R](https://www.r-project.org), tested with version 3.5.0 under [Arch Linux](https://www.archlinux.org).
 
 ## Forthcoming
 
