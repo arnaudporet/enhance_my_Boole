@@ -2,7 +2,7 @@
 
 Copyright 2014-2018 [Arnaud Poret](https://github.com/arnaudporet)
 
-This work is licensed under the [BSD 2-Clause License](https://opensource.org/licenses/BSD-2-Clause).
+This work is licensed under the [BSD 2-Clause License](https://raw.githubusercontent.com/arnaudporet/smoosim/master/license.txt).
 
 ## How to
 
