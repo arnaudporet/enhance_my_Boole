@@ -1,6 +1,5 @@
 # Enhancing Boolean networks with continuous logical operators and edge tuning
-
-Copyright 2014-2018 [Arnaud Poret](https://github.com/arnaudporet)
+Copyright 2014-2019 [Arnaud Poret](https://github.com/arnaudporet)
 
 This work is licensed under the [BSD 2-Clause License](https://raw.githubusercontent.com/arnaudporet/smoosim/master/license.txt).
 

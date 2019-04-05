@@ -1,4 +1,4 @@
-# Copyright 2014-2018 Arnaud Poret
+# Copyright 2014-2019 Arnaud Poret
 # This work is licensed under the BSD 2-Clause License.
 # To view a copy of this license, visit https://opensource.org/licenses/BSD-2-Clause
 
